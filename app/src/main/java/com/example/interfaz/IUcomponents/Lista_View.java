@@ -2,6 +2,7 @@ package com.example.interfaz.IUcomponents;
 
 import android.content.Context;
 
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,27 +16,28 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-public class Lista_View extends ScrollView {
+public class Lista_View extends ConstraintLayout {
 
     static LayoutInflater manager_xml;
     private JSONArray Data_actual;
 
     public Lista_View (Context context){
+
         super(context);
+
+
         this.setLayoutParams(new ScrollView.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
 
-        LinearLayout linearLayout = new LinearLayout(this.getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        linearLayout.setOrientation(linearLayout.VERTICAL);
 
         manager_xml = LayoutInflater.from(this.getContext());
+
+        ViewGroup diseño_base = (ViewGroup) manager_xml.inflate(R.layout.list_view, null);
+        this.addView(diseño_base.getChildAt(0));
+        this.addView(diseño_base.getChildAt(1));
+
 
     }
 
@@ -61,6 +63,8 @@ public class Lista_View extends ScrollView {
 
         int num_datos = data.length();
         ViewGroup root_layout = (ViewGroup) this.getChildAt(layout);
+        root_layout = (ViewGroup) root_layout.getChildAt(0);
+
         int num_item = root_layout.getChildCount();
         int resto = num_item - num_datos;
         JSONObject trans_data = new JSONObject();
