@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <color name="colore">#600773</color>
+    <style name="Theme.Interfaz" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colore</item>
+        <item name="colorPrimaryDark">@color/colore</item>
+        <item name="colorAccent">@color/colore</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+</resources>

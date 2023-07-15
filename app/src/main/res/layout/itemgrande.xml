@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_grande"
+    android:layout_width="match_parent"
+    android:layout_height="124dp"
+    android:background="#600773"
+    android:saveEnabled="true">
+
+
+    <TextView
+        android:id="@+id/nombre"
+        android:layout_width="0dp"
+        android:layout_height="62dp"
+        android:ellipsize="end"
+        android:freezesText="false"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingLeft="20dp"
+        android:paddingTop="25dp"
+        android:paddingRight="10dp"
+        android:text="Ricardo Daniel Villa Atanaciop"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/monto"
+        android:layout_width="215dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingBottom="12dp"
+        android:text="S/ 1200.50"
+        android:textColor="#FFFFFF"
+        android:textSize="23dp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/view3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombre"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/fecha"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center|end"
+        android:paddingEnd="20dp"
+        android:paddingBottom="7dp"
+        android:text="31 Mar 2022 - 9:15 pm"
+        android:textColor="#D1D1D1"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/monto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/monto"
+        app:layout_constraintTop_toBottomOf="@+id/nombre" />
+
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:background="#EDACACAC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+</android.support.constraint.ConstraintLayout>
