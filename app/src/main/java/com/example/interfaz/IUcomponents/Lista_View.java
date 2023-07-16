@@ -26,11 +26,6 @@ public class Lista_View extends ConstraintLayout {
         super(context);
 
 
-        this.setLayoutParams(new ScrollView.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-        ));
-
 
         manager_xml = LayoutInflater.from(this.getContext());
 
