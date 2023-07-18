@@ -1,38 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.example.interfaz.IUcomponents.Buscador xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/my_toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="#53DC22"
-    android:elevation="4dp"
- >
 
-    <LinearLayout
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:background="#600773"
+        android:elevation="4dp"
         android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/titlee"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|center_vertical"
-                android:maxLines="1"
-                android:text="Yape Notificaciones"
-                android:textColor="#FFFFFF"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:visibility="visible" />
 
             <EditText
                 android:id="@+id/input"
@@ -42,17 +23,44 @@
                 android:backgroundTint="#FFFFFF"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name"
+                android:text="Buscar"
                 android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/titlee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#600773"
+                android:gravity="center_horizontal|center_vertical"
+                android:maxLines="1"
+                android:text="Yape Notificaciones"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
         </FrameLayout>
 
-        <Button
-            android:id="@+id/busqueda"
+        <FrameLayout
+            android:id="@+id/cont_button"
             android:layout_width="170dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Button" />
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/cerrar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/busqueda"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Button" />
+        </FrameLayout>
 
         <Button
             android:id="@+id/config"
@@ -60,5 +68,4 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Button" />
-    </LinearLayout>
-</com.example.interfaz.IUcomponents.Buscador>
+</LinearLayout>

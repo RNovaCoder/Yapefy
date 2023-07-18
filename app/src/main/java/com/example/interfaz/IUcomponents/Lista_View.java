@@ -6,6 +6,7 @@ import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -20,19 +21,20 @@ public class Lista_View extends ConstraintLayout {
 
     static LayoutInflater manager_xml;
     private JSONArray Data_actual;
-
+    private FrameLayout cont_data;
+    private FrameLayout cont_data_filtrada;
     public Lista_View (Context context){
 
         super(context);
 
-
-
         manager_xml = LayoutInflater.from(this.getContext());
 
-        ViewGroup diseño_base = (ViewGroup) manager_xml.inflate(R.layout.list_view, null);
-        this.addView(diseño_base.getChildAt(0));
-        this.addView(diseño_base.getChildAt(1));
+        View diseño_base = manager_xml.inflate(R.layout.list_view, null);
 
+        this.addView(diseño_base);
+
+        cont_data = this.findViewById(R.id.data);
+        cont_data_filtrada = this.findViewById(R.id.data_filtrada);
 
     }
 
@@ -54,12 +56,11 @@ public class Lista_View extends ConstraintLayout {
 
     }
 
-    public void agregar_datos (JSONArray data, int layout) {
+    public void agregar_datos (JSONArray data, String type_data) {
+
+        ViewGroup root_layout = (type_data.equals("data"))? cont_data: cont_data_filtrada;
 
         int num_datos = data.length();
-        ViewGroup root_layout = (ViewGroup) this.getChildAt(layout);
-        root_layout = (ViewGroup) root_layout.getChildAt(0);
-
         int num_item = root_layout.getChildCount();
         int resto = num_item - num_datos;
         JSONObject trans_data = new JSONObject();
@@ -75,7 +76,7 @@ public class Lista_View extends ConstraintLayout {
             }
             catch (Exception e) {
 
-                int recurso = (i == 0 && layout == 0) ? R.layout.itemgrande: R.layout.itemnormal;
+                int recurso = (i == 0 && type_data.equals("data")) ? R.layout.itemgrande: R.layout.itemnormal;
                 item = manager_xml.inflate(recurso, null);
                 llenar_item(item, trans_data);
                 root_layout.addView(item);
@@ -94,7 +95,7 @@ public class Lista_View extends ConstraintLayout {
     }
 
     public void agregar_datos (JSONArray data) {
-        agregar_datos(data, 0);
+        agregar_datos(data, "data");
     }
 
 
@@ -124,8 +125,25 @@ public class Lista_View extends ConstraintLayout {
 
         }
 
-        agregar_datos(data_filtrada, 1);
+        agregar_datos(data_filtrada, "data_filtrada");
 
     }
+
+
+    private void animar_filtro (Boolean flag) {
+
+        int status_visible = (flag)? View.VISIBLE : View.GONE;
+        float valor = (flag)? 1.0f : 0.0f;
+
+        cont_data_filtrada.animate().alpha(valor).setDuration(1000).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                cont_data_filtrada.setVisibility(status_visible);
+            }
+        });
+
+    }
+
+
 
 }

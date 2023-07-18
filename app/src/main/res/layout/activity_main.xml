@@ -11,7 +11,7 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="20dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -24,130 +24,130 @@
             tools:layout_editor_absoluteY="57dp">
 
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="124dp">
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="124dp">
 
 
-            <View
-                android:id="@+id/view3"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="#4C4C4C"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:layout_editor_absoluteX="0dp" />
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="#4C4C4C"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:layout_editor_absoluteX="0dp" />
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="0dp"
-                android:layout_height="62dp"
-                android:freezesText="false"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingTop="29dp"
-                android:paddingRight="10dp"
-                android:text="Ricardo Daniel Villa Atanaciop"
-                android:textAllCaps="false"
-                android:textColor="#020202"
-                android:textSize="23sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="0dp"
+                    android:layout_height="62dp"
+                    android:freezesText="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="29dp"
+                    android:paddingRight="10dp"
+                    android:text="Ricardo Daniel Villa Atanaciop"
+                    android:textAllCaps="false"
+                    android:textColor="#020202"
+                    android:textSize="23sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="155dp"
-                android:layout_height="0dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingBottom="12dp"
-                android:text="S/ 1200.50"
-                android:textColor="#000000"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/view3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8"
-                app:layout_constraintVertical_bias="0.0" />
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="155dp"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingBottom="12dp"
+                    android:text="S/ 1200.50"
+                    android:textColor="#000000"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/view3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8"
+                    app:layout_constraintVertical_bias="0.0" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:gravity="center"
-                android:paddingBottom="7dp"
-                android:text="31 Mar 2022 - 9:15 pm"
-                android:textColor="#515151"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:paddingBottom="7dp"
+                    android:text="31 Mar 2022 - 9:15 pm"
+                    android:textColor="#515151"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/textView9"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-        </android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="97dp">
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="97dp">
 
 
-            <View
-                android:id="@+id/view30"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="#989898"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:layout_editor_absoluteX="0dp" />
+                <View
+                    android:id="@+id/view30"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="#989898"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:layout_editor_absoluteX="0dp" />
 
-            <TextView
-                android:id="@+id/textView80"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:freezesText="false"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingTop="17dp"
-                android:paddingRight="10dp"
-                android:text="Ricardo Daniel Villa Atanaciop"
-                android:textAllCaps="false"
-                android:textColor="#020202"
-                android:textSize="22sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/textView80"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:freezesText="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="17dp"
+                    android:paddingRight="10dp"
+                    android:text="Ricardo Daniel Villa Atanaciop"
+                    android:textAllCaps="false"
+                    android:textColor="#020202"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView90"
-                android:layout_width="155dp"
-                android:layout_height="0dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingBottom="9dp"
-                android:text="S/ 1200.50"
-                android:textColor="#000000"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/view30"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView80"
-                app:layout_constraintVertical_bias="0.0" />
+                <TextView
+                    android:id="@+id/textView90"
+                    android:layout_width="155dp"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingBottom="9dp"
+                    android:text="S/ 1200.50"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/view30"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView80"
+                    app:layout_constraintVertical_bias="0.0" />
 
-            <TextView
-                android:id="@+id/textView100"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:gravity="center"
-                android:paddingBottom="5dp"
-                android:text="31 Mar 2022 - 9:15 pm"
-                android:textColor="#515151"
-                app:layout_constraintBottom_toBottomOf="@+id/textView90"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/textView90"
-                app:layout_constraintTop_toBottomOf="@+id/textView80" />
+                <TextView
+                    android:id="@+id/textView100"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:text="31 Mar 2022 - 9:15 pm"
+                    android:textColor="#515151"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView90"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/textView90"
+                    app:layout_constraintTop_toBottomOf="@+id/textView80" />
 
-        </android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
 
 
         </LinearLayout>
