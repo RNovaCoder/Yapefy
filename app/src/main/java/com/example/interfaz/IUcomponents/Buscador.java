@@ -27,17 +27,21 @@ public class Buscador extends Toolbar {
     private EditText input;
     private FrameLayout cont_button;
 
+    @FunctionalInterface
+    public interface Listeners<T> {
+        void run(T target);
+    }
 
-    Map<String, ArrayList<Runnable>> escuchadores = new HashMap<>();
+    Map<String, ArrayList<Listeners<?>>> escuchadores = new HashMap<>();
     private String[] eventos = {"input_search", "input_ocultado", "input_mostrado"};
 
 
     public Buscador (Context contexto){
         super(contexto);
-
         for (String evento : eventos) {
             escuchadores.put(evento, new ArrayList<>());
         }
+
 
 
         input_state = false;
@@ -53,7 +57,6 @@ public class Buscador extends Toolbar {
         cerrar =  this.findViewById(R.id.cerrar);
         cont_button = this.findViewById(R.id.cont_button);
 
-        findViewById(R.id.cont_button);
 
         cont_button.setOnClickListener(new OnClickListener() {
             @Override
@@ -62,7 +65,7 @@ public class Buscador extends Toolbar {
                 animate_view(busqueda, input_state);
 
                 String evento = (!input_state)? "input_mostrado":"input_ocultado";
-                ejecutar_eventos(evento);
+                ejecutar_eventos(evento, cont_button);
 
                 input_state = !input_state;
 
@@ -83,7 +86,7 @@ public class Buscador extends Toolbar {
             public void afterTextChanged(Editable s) {
 
                 if (s.length() >= 4) {
-                    ejecutar_eventos("input_search");
+                    ejecutar_eventos("input_search", input);
                 }
 
             }
@@ -110,17 +113,17 @@ public class Buscador extends Toolbar {
 
 
 
-    public void add_listener (String evento, Runnable escuchador) {
+    public void add_listener (String evento, Listeners<?> escuchador) {
 
-        ArrayList<Runnable> list_evento = escuchadores.get(evento);
+        ArrayList<Listeners<?>> list_evento = escuchadores.get(evento);
         list_evento.add(escuchador);
     }
 
-    private void ejecutar_eventos (String evento){
+    private <T> void ejecutar_eventos (String evento, T target){
 
-        ArrayList<Runnable> list_evento = escuchadores.get(evento);
-        for (Runnable accion : list_evento) {
-            accion.run();
+        ArrayList<Listeners<?>> list_evento = escuchadores.get(evento);
+        for (Listeners accion : list_evento) {
+            accion.run(target);
         }
 
     }
