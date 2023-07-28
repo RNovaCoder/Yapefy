@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="LinearLayout"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
 
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#600773"
-        android:elevation="4dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-        <FrameLayout
+        <EditText
+            android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_margin="5dp"
+            android:backgroundTint="#FFFFFF"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Buscar"
+            android:textColor="#FFFFFF" />
 
-            <EditText
-                android:id="@+id/input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:backgroundTint="#FFFFFF"
-                android:ems="10"
-                android:inputType="text"
-                android:text="Buscar"
-                android:textColor="#FFFFFF" />
-
-            <TextView
-                android:id="@+id/titlee"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#600773"
-                android:gravity="center_horizontal|center_vertical"
-                android:maxLines="1"
-                android:text="Yape Notificaciones"
-                android:textColor="#FFFFFF"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:visibility="visible" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/cont_button"
-            android:layout_width="170dp"
+        <TextView
+            android:id="@+id/titlee"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="#600773"
+            android:gravity="center_horizontal|center_vertical"
+            android:maxLines="1"
+            android:text="Yape Notificaciones"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:visibility="visible" />
 
-            <Button
-                android:id="@+id/cerrar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Button" />
+    </FrameLayout>
 
-            <Button
-                android:id="@+id/busqueda"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Button" />
-        </FrameLayout>
+    <FrameLayout
+        android:id="@+id/cont_button"
+        android:layout_width="170dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <Button
-            android:id="@+id/config"
-            android:layout_width="170dp"
+            android:id="@+id/cerrar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/busqueda"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Button" />
-</LinearLayout>
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/config"
+        android:layout_width="170dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Button" />
+</merge>

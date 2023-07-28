@@ -3,11 +3,13 @@ package com.example.interfaz.IUcomponents;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toolbar;
 
 import com.example.interfaz.R;
@@ -16,11 +18,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Buscador extends Toolbar {
+public class Buscador extends LinearLayout {
 
     static public LayoutInflater manager_xml;
 
     private boolean input_state;
+    private boolean config_state;
+
     private Button busqueda;
     private Button config;
     private Button cerrar;
@@ -28,29 +32,29 @@ public class Buscador extends Toolbar {
     private FrameLayout cont_button;
 
     @FunctionalInterface
-    public interface Listeners<T> {
-        void run(T target);
+    public interface Listeners {
+        void run(View target);
     }
 
-    Map<String, ArrayList<Listeners<?>>> escuchadores = new HashMap<>();
+    Map<String, ArrayList<Listeners>> escuchadores = new HashMap<>();
     private String[] eventos = {"input_search", "input_ocultado", "input_mostrado"};
 
-
-    public Buscador (Context contexto){
-        super(contexto);
+    private void inicializar () {
         for (String evento : eventos) {
             escuchadores.put(evento, new ArrayList<>());
         }
 
-
-
-        input_state = false;
+        input_state = true;
+        config_state = true;
 
 
         manager_xml = LayoutInflater.from(this.getContext());
-        this.addView(manager_xml.inflate(R.layout.buscador, null));
+        manager_xml.inflate(R.layout.buscador, this, true);
 
-        inflate(contexto, R.layout.buscador, null);
+
+        setBackgroundColor(0xFF600773);
+
+
         busqueda =  this.findViewById(R.id.busqueda);
         config =  this.findViewById(R.id.config);
         input =  this.findViewById(R.id.input);
@@ -69,7 +73,23 @@ public class Buscador extends Toolbar {
 
                 input_state = !input_state;
 
-        }
+            }
+        });
+
+        config.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                animate_view(input, config_state);
+                animate_view(busqueda, !config_state);
+
+                String evento = (!input_state)? "input_mostrado":"input_ocultado";
+                ejecutar_eventos(evento, cont_button);
+
+                config_state = !config_state;
+
+            }
         });
 
 
@@ -91,8 +111,23 @@ public class Buscador extends Toolbar {
 
             }
         });
+    }
+
+
+
+
+    public Buscador (Context contexto, AttributeSet attrs){
+        super(contexto,attrs);
+        inicializar();
 
     }
+
+    public Buscador (Context contexto){
+        super(contexto);
+        inicializar();
+    }
+
+
 
 
 
@@ -113,22 +148,20 @@ public class Buscador extends Toolbar {
 
 
 
-    public void add_listener (String evento, Listeners<?> escuchador) {
+    public void add_listener (String evento, Listeners escuchador) {
 
-        ArrayList<Listeners<?>> list_evento = escuchadores.get(evento);
+        ArrayList<Listeners> list_evento = escuchadores.get(evento);
         list_evento.add(escuchador);
     }
 
-    private <T> void ejecutar_eventos (String evento, T target){
+    private void ejecutar_eventos (String evento, View target){
 
-        ArrayList<Listeners<?>> list_evento = escuchadores.get(evento);
+        ArrayList<Listeners> list_evento = escuchadores.get(evento);
         for (Listeners accion : list_evento) {
             accion.run(target);
         }
 
     }
-
-
 
 
 

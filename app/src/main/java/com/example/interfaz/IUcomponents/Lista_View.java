@@ -2,16 +2,18 @@ package com.example.interfaz.IUcomponents;
 
 import android.content.Context;
 
-import android.support.constraint.ConstraintLayout;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.interfaz.R;
+import com.example.interfaz.servicios.Enrutador;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,22 +21,40 @@ import org.json.JSONObject;
 
 public class Lista_View extends ConstraintLayout {
 
+    static Enrutador enrutador;
     static LayoutInflater manager_xml;
     private JSONArray Data_actual;
-    private FrameLayout cont_data;
-    private FrameLayout cont_data_filtrada;
+    private ScrollView scroll_data;
+    private ScrollView scroll_data_filtrada;
+    private Button cargar_pagos;
+    private ConstraintLayout config;
+
+    public Lista_View (Context context, AttributeSet atr){
+        super(context, atr);
+    }
     public Lista_View (Context context){
 
         super(context);
+        enrutador = new Enrutador(getContext());
 
         manager_xml = LayoutInflater.from(this.getContext());
 
-        View diseño_base = manager_xml.inflate(R.layout.list_view, null);
+        manager_xml.inflate(R.layout.list_view, this, true);
 
-        this.addView(diseño_base);
+        scroll_data = this.findViewById(R.id.scroll_data);
+        scroll_data_filtrada = this.findViewById(R.id.scroll_data_filtrada);
+        cargar_pagos = this.findViewById(R.id.cargar_pagos);
+        config = this.findViewById(R.id.config);
 
-        cont_data = this.findViewById(R.id.data);
-        cont_data_filtrada = this.findViewById(R.id.data_filtrada);
+        cargar_pagos.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enrutador.traer_data((json) -> {agregar_datos(json);});
+            }
+        });
+
+
+
 
     }
 
@@ -58,7 +78,9 @@ public class Lista_View extends ConstraintLayout {
 
     public void agregar_datos (JSONArray data, String type_data) {
 
-        ViewGroup root_layout = (type_data.equals("data"))? cont_data: cont_data_filtrada;
+        ViewGroup root_layout = (type_data.equals("data"))? scroll_data: scroll_data_filtrada;
+        root_layout = (ViewGroup) root_layout.getChildAt(0);
+
 
         int num_datos = data.length();
         int num_item = root_layout.getChildCount();
@@ -135,10 +157,25 @@ public class Lista_View extends ConstraintLayout {
         int status_visible = (flag)? View.VISIBLE : View.GONE;
         float valor = (flag)? 1.0f : 0.0f;
 
-        cont_data_filtrada.animate().alpha(valor).setDuration(1000).withEndAction(new Runnable() {
+
+        scroll_data_filtrada.animate().alpha(valor).setDuration(1000).withEndAction(new Runnable() {
             @Override
             public void run() {
-                cont_data_filtrada.setVisibility(status_visible);
+                scroll_data_filtrada.setVisibility(status_visible);
+            }
+        });
+
+    }
+
+    private void animar_config (Boolean flag) {
+
+        int status_visible = (flag)? View.VISIBLE : View.GONE;
+        float valor = (flag)? 1.0f : 0.0f;
+
+        config.animate().alpha(valor).setDuration(1000).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                scroll_data_filtrada.setVisibility(status_visible);
             }
         });
 

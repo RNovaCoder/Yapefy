@@ -11,6 +11,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,12 +23,16 @@ public class Enrutador {
     static RequestQueue manager_request;
     static String api_point ="https://webprized.com/yapeNot/get.php";
 
+    @FunctionalInterface
+    public interface Run {
+        void run(JSONArray data);
+    }
 
     public Enrutador (Context context){
         manager_request = Volley.newRequestQueue(context);
     }
 
-    public void traer_data () {
+    public void traer_data (Run run) {
 
         // Request a string response from the provided URL.
 
@@ -36,7 +44,12 @@ public class Enrutador {
                     public void onResponse(String response) {
 
                         Log.d("VALOR RESPONSE ", response);
-                        data_recibida(response);
+
+                        try {
+                            run.run(new JSONArray(response));
+                        } catch (JSONException e) {
+                            //throw new RuntimeException(e);
+                        }
 
                     }
                 },

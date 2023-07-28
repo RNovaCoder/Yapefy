@@ -1,40 +1,26 @@
-package com.example.interfaz;
+package com.example.interfaz.actividades;
 
-import static android.app.PendingIntent.getActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-
-import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.interfaz.IUcomponents.App_View;
 import com.example.interfaz.IUcomponents.Buscador;
 import com.example.interfaz.IUcomponents.Lista_View;
+import com.example.interfaz.R;
 
 import org.json.JSONException;
 
-public class MainActivity extends AppCompatActivity {
+public class App extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        findViewById(R.id.cargar_pagos).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actualizar_vista();
-            }
-        });
+        App_View app = new App_View(getApplicationContext());
+        setContentView(app);
 
-
-
-        actualizar_vista();
-
-        Intent socket_rep = new Intent(getApplicationContext(), Socket_Reproductor.class);
-        startService(socket_rep);
 
         Lista_View lista = new Lista_View(getApplicationContext());
 

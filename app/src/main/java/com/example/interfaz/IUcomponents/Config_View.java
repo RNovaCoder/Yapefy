@@ -1,8 +1,10 @@
 package com.example.interfaz.IUcomponents;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
-import android.view.LayoutInflater;
+import android.util.AttributeSet;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 
 public class Config_View extends ConstraintLayout {
 
@@ -11,5 +13,9 @@ public class Config_View extends ConstraintLayout {
     public Config_View (Context context){
         super(context);
 
+    }
+
+    public Config_View (Context context, AttributeSet atr){
+        super(context, atr);
     }
 }
