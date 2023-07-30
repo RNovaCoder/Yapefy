@@ -31,9 +31,8 @@ public class Buscador extends LinearLayout {
     static public LayoutInflater manager_xml;
 
     private EditText input;
-    private Button config;
-    private Button cerrar;
-    private Button lupa;
+    private ImageButton config;
+    private ImageButton lupa;
 
     InputMethodManager imm = (InputMethodManager) ContextCompat.getSystemService(getContext(), InputMethodManager.class);
 
@@ -77,16 +76,15 @@ public class Buscador extends LinearLayout {
 
                 view.setTag(new_state);
 
-                //Ver como cambiará el button en sí
-                //animate_view(lupa, new_state);
-
                 animate_view(bar_titlee, new_state);
                 animate_view(input, !new_state);
 
                 if (!new_state) {
+                    lupa.setImageResource(R.drawable.icon_close);
                     input.requestFocus();
                 }
                 else {
+                    lupa.setImageResource(R.drawable.icon_search);
                     input.clearFocus();
                 }
 
@@ -106,6 +104,13 @@ public class Buscador extends LinearLayout {
             public void onClick(View view) {
 
                 boolean new_state = !(boolean) view.getTag();
+
+                if (new_state) {
+                    config.setImageResource(R.drawable.icon_config);
+                }else {
+                    config.setImageResource(R.drawable.icon_close);}
+
+
                 view.setTag(new_state);
                 animate_view(lupa, new_state);
                 animate_view(bar_titlee, true);

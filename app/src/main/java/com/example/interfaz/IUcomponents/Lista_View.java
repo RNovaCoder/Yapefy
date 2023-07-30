@@ -23,6 +23,8 @@ import com.example.interfaz.servicios.Enrutador;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Iterator;
+
 
 public class Lista_View extends ConstraintLayout {
 
@@ -34,19 +36,20 @@ public class Lista_View extends ConstraintLayout {
 
     private ScrollView config;
 
-    public Lista_View (Context context, AttributeSet atr){
+    public Lista_View(Context context, AttributeSet atr) {
 
         super(context, atr);
         inicializar();
     }
-    public Lista_View (Context context){
+
+    public Lista_View(Context context) {
 
         super(context);
         inicializar();
 
     }
 
-    private void inicializar () {
+    private void inicializar() {
         enrutador = new Enrutador(getContext());
 
         manager_xml = LayoutInflater.from(this.getContext());
@@ -61,12 +64,14 @@ public class Lista_View extends ConstraintLayout {
         cargar_pagos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                enrutador.traer_data((json) -> {agregar_datos(json);});
+                enrutador.traer_data((json) -> {
+                    agregar_datos(json);
+                });
             }
         });
     }
 
-    private View llenar_item (View item, JSONObject datos){
+    private View llenar_item(View item, JSONObject datos) {
 
 
         try {
@@ -91,12 +96,16 @@ public class Lista_View extends ConstraintLayout {
 
     }
 
-    public void agregar_datos (JSONArray data, String type_data) {
+    public void agregar_datos(JSONArray data, String type_data) {
 
 
         ViewGroup root_layout = (ViewGroup) scroll_data.getChildAt(0);
         boolean new_state = type_data.equals("data");
         scroll_data.setTag(new_state);
+
+        if (!new_state){
+            root_layout.removeViewAt(0);
+        }
 
         int num_datos = data.length();
         int num_item = root_layout.getChildCount();
@@ -110,37 +119,33 @@ public class Lista_View extends ConstraintLayout {
                 trans_data = data.getJSONObject(i);
                 item = root_layout.getChildAt(i);
 
-                if (item == null){
-                    int recurso = (i == 0 && type_data.equals("data")) ? R.layout.itemgrande: R.layout.itemnormal;
+                if (item == null) {
+                    int recurso = (i == 0 && type_data.equals("data")) ? R.layout.itemgrande : R.layout.itemnormal;
                     item = manager_xml.inflate(recurso, null);
                     llenar_item(item, trans_data);
                     root_layout.addView(item);
-                    Log.d("TEST :: LIS_VIEW:::" , "NUME ITEM INFLADO LLENADO::" + i);
+                    Log.d("TEST :: LIS_VIEW:::", "NUME ITEM INFLADO LLENADO::" + i);
 
-                }
-
-                else {
+                } else {
                     llenar_item(item, trans_data);
                     item.setVisibility(VISIBLE);
-                    Log.d("TEST :: LIS_VIEW:::" , "NUME ITEM REEEMPLAZADO LLENADO::" + i);
+                    Log.d("TEST :: LIS_VIEW:::", "NUME ITEM REEEMPLAZADO LLENADO::" + i);
 
                 }
 
 
-            }
-            catch (Exception e) {
-                Log.d("TEST :: LIS_VIEW:::" , e.getMessage());
+            } catch (Exception e) {
+                Log.d("TEST :: LIS_VIEW:::", e.getMessage());
             }
 
         }
 
-        if (resto > 0){
+        if (resto > 0) {
             for (int i = num_datos; i < num_item; i++) {
                 try {
                     root_layout.getChildAt(i).setVisibility(GONE);
-                }
-                catch (Exception e){
-                    Log.d("TEST :: LIS_VIEW:::" , e.getMessage() + " " + resto + " "  + i);
+                } catch (Exception e) {
+                    Log.d("TEST :: LIS_VIEW:::", e.getMessage() + " " + resto + " " + i);
                 }
             }
         }
@@ -151,51 +156,45 @@ public class Lista_View extends ConstraintLayout {
         }
     }
 
-    public void agregar_datos (JSONArray data) {
+    public void agregar_datos(JSONArray data) {
         agregar_datos(data, "data");
     }
 
 
-    public void filtrar_data (String filtro) {
+    public void filtrar_data(String filtro) {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Realizar la tarea en segundo plano aquí
-                JSONArray data_filtrada = new JSONArray();
+        //Limpiando el filtro para usarlo en el hilo secundario
+        filtro = filtro.toLowerCase().replaceAll("\\s", "");
+        final String finalFiltro = filtro;
 
-                for (int i = 0; i < Data_actual.length(); i++) {
+        // Creando el array que almacenará los resultados
+        JSONArray data_filtrada = new JSONArray();
 
-                    try {
-                        JSONObject jsonObject = Data_actual.getJSONObject(i);
+        new Thread(() -> {
 
-                        // Verificar la condición en la data del JSONObject
-                        if (jsonObject.getString("nombre").contains(filtro)) {
+            //Recorriendo cada item_objeto de la data actual
+            for (int i = 0; i < Data_actual.length(); i++) {
+
+                try {
+                    JSONObject jsonObject = Data_actual.getJSONObject(i);
+                    //Recorriendo cada sección del Item y comparándolo con el filtro
+                    for (Iterator<String> it = jsonObject.keys(); it.hasNext(); ) {
+                        String key = it.next();
+                        String valor = jsonObject.getString(key);
+                        valor = valor.toLowerCase().replaceAll("\\s", "");
+                        if (valor.contains(finalFiltro)) {
                             data_filtrada.put(jsonObject);
-
-                        } else if (jsonObject.getString("monto").contains(filtro)) {
-                            data_filtrada.put(jsonObject);
-
-                        } else if (jsonObject.getString("fecha").contains(filtro)) {
-                            data_filtrada.put(jsonObject);
-
                         }
-
                     }
-                    catch (Exception e){}
-
+                } catch (Exception e) {
                 }
 
 
-                // Comunicarte con el hilo principal para actualizar la interfaz de usuario
+                // Data filtrada lista, actualizando la vista
                 Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        agregar_datos(data_filtrada, "data_filtrada");
-                        Log.d("TEST :: LIS_VIEW:::" , String.valueOf(data_filtrada.length()));
-                        //animar_filtro(true);
-                    }
+                mainHandler.post(() -> {
+                    agregar_datos(data_filtrada, "data_filtrada");
+                    Log.d("TEST :: LIS_VIEW:::", String.valueOf(data_filtrada.length()));
                 });
             }
         }).start();
@@ -203,12 +202,12 @@ public class Lista_View extends ConstraintLayout {
     }
 
 
-    public void data_default () {
+    public void data_default() {
         scroll_data.setTag(true);
         agregar_datos(Data_actual);
     }
 
-    public void animar_config (Boolean flag) {
+    public void animar_config(Boolean flag) {
 
         animar_view(config, flag);
         animar_view(cargar_pagos, !flag);
@@ -219,33 +218,30 @@ public class Lista_View extends ConstraintLayout {
 
     }
 
-    public void animar_button (Boolean flag) {
+    public void animar_button(Boolean flag) {
         animar_view(cargar_pagos, flag);
     }
 
 
-    private void animar_view (View witget, boolean flag) {
+    private void animar_view(View witget, boolean flag) {
 
-        int new_status = (flag)? View.VISIBLE : View.GONE;
-        float valor = (flag)? 1.0f : 0.0f;
+        int new_status = (flag) ? View.VISIBLE : View.GONE;
+        float valor = (flag) ? 1.0f : 0.0f;
         int duracion = 100;
 
-        if (flag){
+        if (flag) {
             witget.setVisibility(new_status);
             witget.animate().alpha(valor).setDuration(duracion)
                     .setInterpolator(new AccelerateDecelerateInterpolator());
-        }
-
-        else {
+        } else {
             witget.animate().alpha(valor).setDuration(duracion)
-                    .setInterpolator(new AccelerateDecelerateInterpolator()).withEndAction(()-> {
-                witget.setVisibility(new_status);
-            });
+                    .setInterpolator(new AccelerateDecelerateInterpolator()).withEndAction(() -> {
+                        witget.setVisibility(new_status);
+                    });
         }
 
 
     }
-
 
 
 }
