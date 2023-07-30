@@ -1,73 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_grande"
+    android:id="@+id/item_normal"
     android:layout_width="match_parent"
-    android:layout_height="124dp"
+    android:layout_height="wrap_content"
     android:background="#600773"
-    android:saveEnabled="true">
+    android:saveEnabled="true"
+    android:orientation="vertical">
 
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:background="#4AFFFFFF" />
 
     <TextView
         android:id="@+id/nombre"
-        android:layout_width="0dp"
-        android:layout_height="62dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:ellipsize="end"
         android:freezesText="false"
         android:gravity="center_vertical"
         android:maxLines="1"
         android:paddingLeft="20dp"
-        android:paddingTop="25dp"
+        android:paddingTop="26dp"
         android:paddingRight="10dp"
+        android:paddingBottom="4dp"
         android:text="Ricardo Daniel Villa Atanaciop"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:textSize="22dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="23dp" />
 
-    <TextView
-        android:id="@+id/monto"
-        android:layout_width="215dp"
-        android:layout_height="0dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:paddingBottom="12dp"
-        android:text="S/ 1200.50"
-        android:textColor="#FFFFFF"
-        android:textSize="23dp"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/view3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombre"
-        app:layout_constraintVertical_bias="0.0" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="19dp">
 
-    <TextView
-        android:id="@+id/fecha"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center|end"
-        android:paddingEnd="20dp"
-        android:paddingBottom="7dp"
-        android:text="31 Mar 2022 - 9:15 pm"
-        android:textColor="#D1D1D1"
-        android:textSize="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/monto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/monto"
-        app:layout_constraintTop_toBottomOf="@+id/nombre" />
+        <TextView
+            android:id="@+id/monto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="60"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="S/ 1200.50"
+            android:textColor="#FFFFFF"
+            android:textSize="24dp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/fecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"
+            android:ellipsize="end"
+            android:gravity="center|end"
+            android:paddingEnd="20dp"
+            android:text="29 Julio. 2022 - 12:44 pm"
+            android:textColor="#D1D1D1"
+            android:textSize="17dp" />
+    </LinearLayout>
 
 
-    <View
-        android:id="@+id/view3"
-        android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:background="#EDACACAC"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

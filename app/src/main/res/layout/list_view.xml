@@ -24,7 +24,6 @@
         android:id="@+id/scroll_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#41E9FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,34 +32,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/scroll_data_filtrada"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#4DAF5D"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+        </LinearLayout>
     </ScrollView>
 
     <ScrollView
         android:id="@+id/config"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FF8787">
+        android:alpha="0"
+        android:background="#FF8787"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
 

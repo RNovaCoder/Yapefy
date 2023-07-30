@@ -1,70 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="97dp"
-    android:id="@+id/item_normal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_normal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:saveEnabled="true">
-    >
 
 
     <View
         android:id="@+id/view3"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#C6C6C6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        android:background="#CEC3C3C3" />
 
     <TextView
         android:id="@+id/nombre"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:freezesText="false"
         android:gravity="center_vertical"
         android:maxLines="1"
         android:paddingLeft="20dp"
-        android:paddingTop="16dp"
+        android:paddingTop="25dp"
         android:paddingRight="10dp"
+        android:paddingBottom="5dp"
         android:text="Ricardo Daniel Villa Atanaciop"
         android:textAllCaps="false"
-        android:textColor="#020202"
-        android:textSize="21dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="#090909"
+        android:textSize="22dp" />
 
-    <TextView
-        android:id="@+id/monto"
-        android:layout_width="218dp"
-        android:layout_height="0dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:paddingBottom="9dp"
-        android:text="S/ 1200.50"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/view3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombre"
-        app:layout_constraintVertical_bias="0.0" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="18dp">
 
-    <TextView
-        android:id="@+id/fecha"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center_vertical|end"
-        android:paddingEnd="20dp"
-        android:paddingBottom="5dp"
-        android:text="31 Mar 2022 - 9:15 pm"
-        android:textColor="#515151"
-        android:textSize="11dp"
-        app:layout_constraintBottom_toBottomOf="@+id/monto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/monto"
-        app:layout_constraintTop_toBottomOf="@+id/nombre" />
+        <TextView
+            android:id="@+id/monto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="60"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="S/ 1200.50"
+            android:textColor="#252525"
+            android:textSize="23dp"
+            android:textStyle="normal" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/fecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"
+            android:ellipsize="end"
+            android:gravity="center|end"
+            android:paddingEnd="20dp"
+            android:text="29 Julio. 2022 - 12:44 pm"
+            android:textColor="#202020"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+
+</LinearLayout>

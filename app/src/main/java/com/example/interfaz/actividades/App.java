@@ -1,6 +1,7 @@
 package com.example.interfaz.actividades;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,30 +19,11 @@ public class App extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App_View app = new App_View(getApplicationContext());
-        setContentView(app);
-
-
-        Lista_View lista = new Lista_View(getApplicationContext());
-
-
-        Buscador toolbar = new Buscador(getApplicationContext());
-
-        toolbar.add_listener("sad", (target) -> {
-            EditText input = (EditText) target;
-            lista.filtrar_data( input.getText().toString());
-        });
+        // Establecer el ViewGroup personalizado como contenido de la actividad
+        setContentView(R.layout.activity_app);
+        getSupportActionBar().hide();
 
 
     }
 
-    public void crear_items (String datos) throws JSONException {
-
-    }
-
-    public void actualizar_vista () {
-
-
-
-    }
 }

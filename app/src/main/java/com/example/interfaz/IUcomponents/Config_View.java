@@ -9,7 +9,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 public class Config_View extends ConstraintLayout {
 
 
-
     public Config_View (Context context){
         super(context);
 

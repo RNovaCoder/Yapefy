@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -31,8 +34,6 @@ public class App_View extends LinearLayout {
     public void inicializador () {
 
 
-
-
         setOrientation(LinearLayout.VERTICAL);
 
         // Establecer el ancho y alto a "match_parent" (LayoutParams.MATCH_PARENT)
@@ -46,8 +47,28 @@ public class App_View extends LinearLayout {
         manager_xml = LayoutInflater.from(this.getContext());
         manager_xml.inflate(R.layout.app_actividad, this, true);
 
+        Buscador buscador = this.findViewById(R.id.buscador);
+        Lista_View lista_view = this.findViewById(R.id.lista);
 
+        buscador.add_listener("input_search", (input) -> {
+            lista_view.filtrar_data(((EditText) input).getText().toString());
+        });
 
+        buscador.add_listener("toggle_lupa", (lupa) -> {
+
+            boolean state = (boolean) lupa.getTag();
+            lista_view.animar_button(state);
+
+            if (state) {
+                lista_view.data_default();
+            }
+
+        });
+
+        buscador.add_listener("toggle_config", (config) -> {
+            boolean state = (boolean) config.getTag();
+            lista_view.animar_config(!state);
+        });
 
     }
 

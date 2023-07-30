@@ -9,6 +9,7 @@
 
     <com.example.interfaz.IUcomponents.Buscador
 
+        android:id="@+id/buscador"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="#600773"
@@ -18,6 +19,7 @@
     </com.example.interfaz.IUcomponents.Buscador>
 
     <com.example.interfaz.IUcomponents.Lista_View
+        android:id="@+id/lista"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

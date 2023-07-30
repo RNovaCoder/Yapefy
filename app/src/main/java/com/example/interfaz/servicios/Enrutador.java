@@ -32,6 +32,8 @@ public class Enrutador {
         manager_request = Volley.newRequestQueue(context);
     }
 
+
+
     public void traer_data (Run run) {
 
         // Request a string response from the provided URL.
@@ -47,8 +49,9 @@ public class Enrutador {
 
                         try {
                             run.run(new JSONArray(response));
+
                         } catch (JSONException e) {
-                            //throw new RuntimeException(e);
+                            Log.d("ERROR AL CREAR JSON",e.getMessage());
                         }
 
                     }
@@ -76,7 +79,7 @@ public class Enrutador {
 
                 // on below line we are passing our key
                 // and value pair to our parameters.
-                params.put("Cant", "20");
+                params.put("Cant", "70");
 
                 return params;
             }

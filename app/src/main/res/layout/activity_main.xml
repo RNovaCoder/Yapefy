@@ -9,37 +9,42 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <ScrollView
+    <LinearLayout
         android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="299dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/cargar_pagos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.example.interfaz.IUcomponents.Buscador
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.example.interfaz.IUcomponents.Buscador>
 
         <LinearLayout
             android:id="@+id/Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="57dp">
+            android:orientation="vertical">
 
 
-            <include
-                layout="@layout/itemgrande" />
+            <include layout="@layout/itemgrande" />
 
-            <include
-                layout="@layout/itemnormal" />
+            <include layout="@layout/itemnormal" />
 
-            <include
-                layout="@layout/itemnormal" />
+            <include layout="@layout/itemnormal" />
 
-            <include
-                layout="@layout/itemnormal" />
+            <include layout="@layout/itemnormal" />
 
 
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
     <Button
         android:id="@+id/cargar_pagos"
