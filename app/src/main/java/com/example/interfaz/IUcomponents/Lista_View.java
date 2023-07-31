@@ -36,6 +36,8 @@ public class Lista_View extends ConstraintLayout {
 
     private ScrollView config;
 
+    private DataList model_data = new DataList();
+
     public Lista_View(Context context, AttributeSet atr) {
 
         super(context, atr);
@@ -50,10 +52,10 @@ public class Lista_View extends ConstraintLayout {
     }
 
     private void inicializar() {
+
         Enrutador.inicializar(getContext());
 
         manager_xml = LayoutInflater.from(this.getContext());
-
         manager_xml.inflate(R.layout.list_view, this, true);
 
         contain_data = this.findViewById(R.id.contain_data);
@@ -63,7 +65,7 @@ public class Lista_View extends ConstraintLayout {
         contain_data.setTag(false);
 
         View item_fantasma;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 200; i++) {
             item_fantasma = manager_xml.inflate(R.layout.itemnormal, null);
             item_fantasma.setVisibility(GONE);
             contain_data.addView(item_fantasma);
@@ -73,14 +75,16 @@ public class Lista_View extends ConstraintLayout {
             @Override
             public void onClick(View view) {
                 Enrutador.traer_data((json) -> {
-                    agregar_datos(json);
+
+                    model_data.set_data(json);
+                    data_default();
+
                 });
             }
         });
     }
 
     private View llenar_item(View item, JSONObject datos) {
-
 
         try {
             TextView nombre = item.findViewById(R.id.nombre);
@@ -104,19 +108,17 @@ public class Lista_View extends ConstraintLayout {
 
     }
 
-    public void agregar_datos(JSONArray data, String type_data) {
+    public void pintar_datos (JSONArray data, boolean new_state) {
 
-        boolean new_state = type_data.equals("data");
-        boolean state = (boolean) contain_data.getTag();
+        View primer_item = contain_data.getChildAt(0);
+        String tipo = (String) primer_item.getTag();
 
-        if (!new_state && state){
+        if (!new_state && tipo.equals("grande")){
             contain_data.removeViewAt(0);
         }
-        else if (new_state && !state) {
+        else if (new_state && tipo.equals("chico")) {
             contain_data.addView(manager_xml.inflate(R.layout.itemgrande, null), 0);
         }
-
-        contain_data.setTag(new_state);
 
 
         int num_datos = data.length();
@@ -132,7 +134,7 @@ public class Lista_View extends ConstraintLayout {
                 item = contain_data.getChildAt(i);
 
                 if (item == null) {
-                    int recurso = (i == 0 && type_data.equals("data")) ? R.layout.itemgrande : R.layout.itemnormal;
+                    int recurso = (i == 0 && new_state) ? R.layout.itemgrande : R.layout.itemnormal;
                     item = manager_xml.inflate(recurso, null);
                     llenar_item(item, trans_data);
                     contain_data.addView(item);
@@ -161,66 +163,42 @@ public class Lista_View extends ConstraintLayout {
                 }
             }
         }
-
-
-        if (type_data.equals("data")) {
-            Data_actual = data;
-        }
     }
 
-    public void agregar_datos(JSONArray data) {
-        agregar_datos(data, "data");
+    
+    public void eliminar_items () {
+
+        int hijos = contain_data.getChildCount();
+        contain_data.removeViews(200, hijos - 200);
+
     }
-
-
+    
+    
     public void filtrar_data(String filtro) {
 
-        //Limpiando el filtro para usarlo en el hilo secundario
-        filtro = filtro.toLowerCase().replaceAll("\\s", "");
-        final String finalFiltro = filtro;
-
-        // Creando el array que almacenará los resultados
-        JSONArray data_filtrada = new JSONArray();
-
-        new Thread(() -> {
-
-            //Recorriendo cada item_objeto de la data actual
-            for (int i = 0; i < Data_actual.length(); i++) {
-
-                try {
-                    JSONObject jsonObject = Data_actual.getJSONObject(i);
-                    //Recorriendo cada sección del Item y comparándolo con el filtro
-                    for (Iterator<String> it = jsonObject.keys(); it.hasNext(); ) {
-                        String key = it.next();
-                        String valor = jsonObject.getString(key);
-                        valor = valor.toLowerCase().replaceAll("\\s", "");
-                        if (valor.contains(finalFiltro)) {
-                            data_filtrada.put(jsonObject);
-                        }
-                    }
-                } catch (Exception e) {
-                }
-
-            }
-
-
-            // Data filtrada lista, actualizando la vista
-            Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> {
-                agregar_datos(data_filtrada, "data_filtrada");
-                Log.d("TEST :: LIS_VIEW:::", String.valueOf(data_filtrada.length()));
-            });
-
-        }).start();
+        model_data.set_contador(0);
+        model_data.set_estado(false);
+        model_data.filtrar_data(filtro, () -> {
+            pintar_datos(model_data.obtener_data(), false);
+        });
 
     }
 
 
     public void data_default() {
-        if (!(boolean) contain_data.getTag()) {
-            agregar_datos(Data_actual);
+
+
+        if (!model_data.state_data || model_data.get_contador() != 0) {
+            model_data.set_estado(true);
+            model_data.set_contador(0);
+            pintar_datos(model_data.obtener_data(), model_data.state_data);
         }
-        contain_data.setTag(true);
+        else {
+            model_data.set_estado(true);
+            model_data.set_contador(0);
+        }
+
+
 
     }
 
@@ -228,8 +206,8 @@ public class Lista_View extends ConstraintLayout {
 
         animar_view(config, flag);
         animar_view(cargar_pagos, !flag);
-
         data_default();
+
     }
 
     public void animar_button(Boolean flag) {
