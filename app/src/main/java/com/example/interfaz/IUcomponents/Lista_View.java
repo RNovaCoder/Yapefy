@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -28,10 +29,9 @@ import java.util.Iterator;
 
 public class Lista_View extends ConstraintLayout {
 
-    static Enrutador enrutador;
     static LayoutInflater manager_xml;
     private JSONArray Data_actual = new JSONArray();
-    private ScrollView scroll_data;
+    private LinearLayout contain_data;
     private Button cargar_pagos;
 
     private ScrollView config;
@@ -50,21 +50,29 @@ public class Lista_View extends ConstraintLayout {
     }
 
     private void inicializar() {
-        enrutador = new Enrutador(getContext());
+        Enrutador.inicializar(getContext());
 
         manager_xml = LayoutInflater.from(this.getContext());
 
         manager_xml.inflate(R.layout.list_view, this, true);
 
-        scroll_data = this.findViewById(R.id.scroll_data);
+        contain_data = this.findViewById(R.id.contain_data);
         cargar_pagos = this.findViewById(R.id.cargar_pagos);
         config = this.findViewById(R.id.config);
 
+        contain_data.setTag(false);
+
+        View item_fantasma;
+        for (int i = 0; i < 100; i++) {
+            item_fantasma = manager_xml.inflate(R.layout.itemnormal, null);
+            item_fantasma.setVisibility(GONE);
+            contain_data.addView(item_fantasma);
+        }
 
         cargar_pagos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                enrutador.traer_data((json) -> {
+                Enrutador.traer_data((json) -> {
                     agregar_datos(json);
                 });
             }
@@ -98,17 +106,21 @@ public class Lista_View extends ConstraintLayout {
 
     public void agregar_datos(JSONArray data, String type_data) {
 
-
-        ViewGroup root_layout = (ViewGroup) scroll_data.getChildAt(0);
         boolean new_state = type_data.equals("data");
-        scroll_data.setTag(new_state);
+        boolean state = (boolean) contain_data.getTag();
 
-        if (!new_state){
-            root_layout.removeViewAt(0);
+        if (!new_state && state){
+            contain_data.removeViewAt(0);
+        }
+        else if (new_state && !state) {
+            contain_data.addView(manager_xml.inflate(R.layout.itemgrande, null), 0);
         }
 
+        contain_data.setTag(new_state);
+
+
         int num_datos = data.length();
-        int num_item = root_layout.getChildCount();
+        int num_item = contain_data.getChildCount();
         int resto = num_item - num_datos;
         JSONObject trans_data;
         View item;
@@ -117,19 +129,19 @@ public class Lista_View extends ConstraintLayout {
 
             try {
                 trans_data = data.getJSONObject(i);
-                item = root_layout.getChildAt(i);
+                item = contain_data.getChildAt(i);
 
                 if (item == null) {
                     int recurso = (i == 0 && type_data.equals("data")) ? R.layout.itemgrande : R.layout.itemnormal;
                     item = manager_xml.inflate(recurso, null);
                     llenar_item(item, trans_data);
-                    root_layout.addView(item);
-                    Log.d("TEST :: LIS_VIEW:::", "NUME ITEM INFLADO LLENADO::" + i);
+                    contain_data.addView(item);
+                    //Log.d("TEST :: LIS_VIEW:::", "NUME ITEM INFLADO LLENADO::" + i);
 
                 } else {
                     llenar_item(item, trans_data);
                     item.setVisibility(VISIBLE);
-                    Log.d("TEST :: LIS_VIEW:::", "NUME ITEM REEEMPLAZADO LLENADO::" + i);
+                    //Log.d("TEST :: LIS_VIEW:::", "NUME ITEM REEEMPLAZADO LLENADO::" + i);
 
                 }
 
@@ -143,7 +155,7 @@ public class Lista_View extends ConstraintLayout {
         if (resto > 0) {
             for (int i = num_datos; i < num_item; i++) {
                 try {
-                    root_layout.getChildAt(i).setVisibility(GONE);
+                    contain_data.getChildAt(i).setVisibility(GONE);
                 } catch (Exception e) {
                     Log.d("TEST :: LIS_VIEW:::", e.getMessage() + " " + resto + " " + i);
                 }
@@ -189,22 +201,27 @@ public class Lista_View extends ConstraintLayout {
                 } catch (Exception e) {
                 }
 
-
-                // Data filtrada lista, actualizando la vista
-                Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> {
-                    agregar_datos(data_filtrada, "data_filtrada");
-                    Log.d("TEST :: LIS_VIEW:::", String.valueOf(data_filtrada.length()));
-                });
             }
+
+
+            // Data filtrada lista, actualizando la vista
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(() -> {
+                agregar_datos(data_filtrada, "data_filtrada");
+                Log.d("TEST :: LIS_VIEW:::", String.valueOf(data_filtrada.length()));
+            });
+
         }).start();
 
     }
 
 
     public void data_default() {
-        scroll_data.setTag(true);
-        agregar_datos(Data_actual);
+        if (!(boolean) contain_data.getTag()) {
+            agregar_datos(Data_actual);
+        }
+        contain_data.setTag(true);
+
     }
 
     public void animar_config(Boolean flag) {
@@ -212,10 +229,7 @@ public class Lista_View extends ConstraintLayout {
         animar_view(config, flag);
         animar_view(cargar_pagos, !flag);
 
-        if (!(boolean) scroll_data.getTag()) {
-            data_default();
-        }
-
+        data_default();
     }
 
     public void animar_button(Boolean flag) {

@@ -55,17 +55,19 @@
         android:layout_width="56dp"
         android:layout_height="match_parent"
         android:layout_weight="0"
-        android:backgroundTint="#00FFFFFF"
-        android:background="@android:color/transparent"
-        tools:srcCompat="@drawable/icon_search" />
+        android:background="@null"
+        android:paddingLeft="22dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/icon_search" />
 
     <ImageButton
         android:id="@+id/config"
         android:layout_width="56dp"
         android:layout_height="match_parent"
         android:layout_weight="0"
-        android:backgroundTint="#00FFFFFF"
-        app:srcCompat="@drawable/icon_config"
-        android:background="@android:color/transparent"/>
+        android:background="@null"
+        android:padding="11dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/icon_config" />
 
 </merge>

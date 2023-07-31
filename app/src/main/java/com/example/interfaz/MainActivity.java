@@ -29,24 +29,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        actualizar_vista();
-
-        Intent socket_rep = new Intent(getApplicationContext(), Socket_Reproductor.class);
-        startService(socket_rep);
-
-        Lista_View lista = new Lista_View(getApplicationContext());
-
-
-        Buscador toolbar = new Buscador(getApplicationContext());
-
-        toolbar.add_listener("sad", (target) -> {
-            EditText input = (EditText) target;
-            lista.filtrar_data( input.getText().toString());
-        });
-
-
     }
 
     public void crear_items (String datos) throws JSONException {

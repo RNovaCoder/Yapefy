@@ -21,6 +21,8 @@ import java.util.Map;
 public class Enrutador {
 
     static RequestQueue manager_request;
+
+    static boolean ocupado = false;
     static String api_point ="https://webprized.com/yapeNot/get.php";
 
     @FunctionalInterface
@@ -28,13 +30,19 @@ public class Enrutador {
         void run(JSONArray data);
     }
 
-    public Enrutador (Context context){
+    private Enrutador (Context context){
         manager_request = Volley.newRequestQueue(context);
+    }
+
+    static public void inicializar (Context context){
+        if (manager_request == null){
+            new Enrutador(context);
+        }
     }
 
 
 
-    public void traer_data (Run run) {
+    static public void traer_data (Run run) {
 
         // Request a string response from the provided URL.
 
@@ -45,10 +53,12 @@ public class Enrutador {
                     @Override
                     public void onResponse(String response) {
 
+                        ocupado = false;
                         Log.d("VALOR RESPONSE ", response);
 
                         try {
-                            run.run(new JSONArray(response));
+                            JSONArray respuesta = new JSONArray(response);
+                            run.run(respuesta);
 
                         } catch (JSONException e) {
                             Log.d("ERROR AL CREAR JSON",e.getMessage());
@@ -59,6 +69,7 @@ public class Enrutador {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        ocupado = false;
 
                         Log.d("ERROR EN ENVÍO: " ,  "Server Error");
 
@@ -79,7 +90,7 @@ public class Enrutador {
 
                 // on below line we are passing our key
                 // and value pair to our parameters.
-                params.put("Cant", "70");
+                params.put("Cant", "150");
 
                 return params;
             }
@@ -87,8 +98,14 @@ public class Enrutador {
         };
 
 
-        //Envía el Pedido
-        manager_request.add(stringRequest);
+        Log.d("NUMERO SOLICTUDES ", String.valueOf(manager_request.getSequenceNumber()));
+
+
+        if (!ocupado) {
+            manager_request.add(stringRequest);
+            ocupado = true;
+        }
+
 
 
     }

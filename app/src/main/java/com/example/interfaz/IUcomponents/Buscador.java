@@ -34,7 +34,7 @@ public class Buscador extends LinearLayout {
     private ImageButton config;
     private ImageButton lupa;
 
-    InputMethodManager imm = (InputMethodManager) ContextCompat.getSystemService(getContext(), InputMethodManager.class);
+    public InputMethodManager imm = (InputMethodManager) ContextCompat.getSystemService(getContext(), InputMethodManager.class);
 
 
     private TextView bar_titlee;
@@ -112,9 +112,14 @@ public class Buscador extends LinearLayout {
 
 
                 view.setTag(new_state);
+                lupa.setTag(true);
+
                 animate_view(lupa, new_state);
                 animate_view(bar_titlee, true);
                 animate_view(input, false);
+                lupa.setImageResource(R.drawable.icon_search);
+                input.clearFocus();
+                toogle_teclado(false);
 
                 ejecutar_eventos("toggle_config", view);
 
@@ -142,8 +147,6 @@ public class Buscador extends LinearLayout {
             }
         });
     }
-
-
 
 
     public Buscador (Context contexto, AttributeSet attrs){
@@ -180,8 +183,6 @@ public class Buscador extends LinearLayout {
 
     }
 
-
-
     public void add_listener (String evento, Listeners escuchador) {
 
         ArrayList<Listeners> list_evento = escuchadores.get(evento);
@@ -195,18 +196,20 @@ public class Buscador extends LinearLayout {
             accion.run(target);
         }
 
-
         Log.d("EVENTO EJECUTADO::  " , evento);
 
     }
 
     private void toogle_teclado (boolean flag) {
-        if (flag) {
-            imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
-        }
-        else {
-            imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
-        }
+
+        new Thread(() -> {
+            if (flag) {
+                imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+            }
+            else {
+                imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+            }
+        }).start();
 
     }
 

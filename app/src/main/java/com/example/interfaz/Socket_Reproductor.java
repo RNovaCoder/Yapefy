@@ -37,6 +37,7 @@ public class Socket_Reproductor extends Service {
     public Thread socket, notif;
 
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
