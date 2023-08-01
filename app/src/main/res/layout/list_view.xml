@@ -8,6 +8,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lista_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
     <Button
         android:id="@+id/cargar_pagos"
         android:layout_width="wrap_content"
@@ -16,33 +29,13 @@
         android:backgroundTint="#600773"
         android:text="Cagar Pagos"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/scroll_data"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/lista_recycler"
+        app:layout_constraintEnd_toEndOf="@+id/lista_recycler"
+        app:layout_constraintStart_toStartOf="@+id/lista_recycler" />
 
     <ScrollView
-        android:id="@+id/scroll_data"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <LinearLayout
-            android:id="@+id/contain_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-        </LinearLayout>
-    </ScrollView>
-
-    <ScrollView
-        android:id="@+id/config"
+        android:id="@+id/cont_config"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"

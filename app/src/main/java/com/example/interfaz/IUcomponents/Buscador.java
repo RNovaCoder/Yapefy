@@ -1,7 +1,5 @@
 package com.example.interfaz.IUcomponents;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,9 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -60,7 +56,7 @@ public class Buscador extends LinearLayout {
 
         lupa =  this.findViewById(R.id.lupa);
         input =  this.findViewById(R.id.input);
-        config =  this.findViewById(R.id.config);
+        config =  this.findViewById(R.id.cont_config);
         bar_titlee = this.findViewById(R.id.bar_titlee);
 
 

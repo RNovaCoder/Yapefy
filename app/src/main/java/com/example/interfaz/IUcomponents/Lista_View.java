@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.interfaz.R;
 import com.example.interfaz.servicios.Enrutador;
@@ -24,19 +26,20 @@ import com.example.interfaz.servicios.Enrutador;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class Lista_View extends ConstraintLayout {
 
     static LayoutInflater manager_xml;
-    private JSONArray Data_actual = new JSONArray();
-    private LinearLayout contain_data;
     private Button cargar_pagos;
 
-    private ScrollView config;
+    private ScrollView cont_config;
 
-    private DataList model_data = new DataList();
+    private RecyclerView lista;
+    private AdapterYape adp_yape;
 
     public Lista_View(Context context, AttributeSet atr) {
 
@@ -58,153 +61,52 @@ public class Lista_View extends ConstraintLayout {
         manager_xml = LayoutInflater.from(this.getContext());
         manager_xml.inflate(R.layout.list_view, this, true);
 
-        contain_data = this.findViewById(R.id.contain_data);
         cargar_pagos = this.findViewById(R.id.cargar_pagos);
-        config = this.findViewById(R.id.config);
+        cont_config = this.findViewById(R.id.cont_config);
 
-        contain_data.setTag(false);
+        lista = this.findViewById(R.id.lista_recycler);
 
-        View item_fantasma;
-        for (int i = 0; i < 200; i++) {
-            item_fantasma = manager_xml.inflate(R.layout.itemnormal, null);
-            item_fantasma.setVisibility(GONE);
-            contain_data.addView(item_fantasma);
-        }
+        adp_yape = new AdapterYape();
+        lista.setAdapter(adp_yape);
+        lista.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
         cargar_pagos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Enrutador.traer_data((json) -> {
 
-                    model_data.set_data(json);
-                    data_default();
+                    set_data(json);
 
                 });
             }
         });
     }
 
-    private View llenar_item(View item, JSONObject datos) {
-
-        try {
-            TextView nombre = item.findViewById(R.id.nombre);
-            nombre.setText(datos.getString("nombre"));
-
-            TextView monto = item.findViewById(R.id.monto);
-            monto.setText(datos.getString("monto"));
-
-            TextView fecha = item.findViewById(R.id.fecha);
-            fecha.setText(datos.getString("fecha"));
-
-            Log.d("Errore al llenar", fecha.getText().toString() + nombre.getText().toString() + monto.getText().toString());
-
-
-        } catch (Exception e) {
-            Log.d("Errore al llenar", e.getMessage());
-        }
-
-
-        return item;
-
-    }
-
-    public void pintar_datos (JSONArray data, boolean new_state) {
-
-        View primer_item = contain_data.getChildAt(0);
-        String tipo = (String) primer_item.getTag();
-
-        if (!new_state && tipo.equals("grande")){
-            contain_data.removeViewAt(0);
-        }
-        else if (new_state && tipo.equals("chico")) {
-            contain_data.addView(manager_xml.inflate(R.layout.itemgrande, null), 0);
-        }
-
-
-        int num_datos = data.length();
-        int num_item = contain_data.getChildCount();
-        int resto = num_item - num_datos;
-        JSONObject trans_data;
-        View item;
-
-        for (int i = 0; i < num_datos; i++) {
-
-            try {
-                trans_data = data.getJSONObject(i);
-                item = contain_data.getChildAt(i);
-
-                if (item == null) {
-                    int recurso = (i == 0 && new_state) ? R.layout.itemgrande : R.layout.itemnormal;
-                    item = manager_xml.inflate(recurso, null);
-                    llenar_item(item, trans_data);
-                    contain_data.addView(item);
-                    //Log.d("TEST :: LIS_VIEW:::", "NUME ITEM INFLADO LLENADO::" + i);
-
-                } else {
-                    llenar_item(item, trans_data);
-                    item.setVisibility(VISIBLE);
-                    //Log.d("TEST :: LIS_VIEW:::", "NUME ITEM REEEMPLAZADO LLENADO::" + i);
-
-                }
-
-
-            } catch (Exception e) {
-                Log.d("TEST :: LIS_VIEW:::", e.getMessage());
-            }
-
-        }
-
-        if (resto > 0) {
-            for (int i = num_datos; i < num_item; i++) {
-                try {
-                    contain_data.getChildAt(i).setVisibility(GONE);
-                } catch (Exception e) {
-                    Log.d("TEST :: LIS_VIEW:::", e.getMessage() + " " + resto + " " + i);
-                }
-            }
-        }
-    }
-
-    
-    public void eliminar_items () {
-
-        int hijos = contain_data.getChildCount();
-        contain_data.removeViews(200, hijos - 200);
-
-    }
-    
     
     public void filtrar_data(String filtro) {
 
-        model_data.set_contador(0);
-        model_data.set_estado(false);
-        model_data.filtrar_data(filtro, () -> {
-            pintar_datos(model_data.obtener_data(), false);
-        });
+        adp_yape.filtrar_data(filtro);
 
     }
 
 
     public void data_default() {
+        adp_yape.default_data();
+    }
 
+    public void set_data(JSONArray data) {
 
-        if (!model_data.state_data || model_data.get_contador() != 0) {
-            model_data.set_estado(true);
-            model_data.set_contador(0);
-            pintar_datos(model_data.obtener_data(), model_data.state_data);
-        }
-        else {
-            model_data.set_estado(true);
-            model_data.set_contador(0);
-        }
-
-
+        adp_yape.set_data(JsonToListObjetc(data));
 
     }
 
+
+
+
     public void animar_config(Boolean flag) {
 
-        animar_view(config, flag);
+        animar_view(cont_config, flag);
         animar_view(cargar_pagos, !flag);
         data_default();
 
@@ -213,6 +115,8 @@ public class Lista_View extends ConstraintLayout {
     public void animar_button(Boolean flag) {
         animar_view(cargar_pagos, flag);
     }
+
+
 
 
     private void animar_view(View witget, boolean flag) {
@@ -232,6 +136,33 @@ public class Lista_View extends ConstraintLayout {
                     });
         }
 
+
+    }
+
+    public List<ListItem> JsonToListObjetc (JSONArray data) {
+
+        List<ListItem> data_lista =  new ArrayList<>();
+        ListItem listItem;
+        try {
+            for (int i = 0; i < data.length() ; i++) {
+
+                JSONObject item = data.getJSONObject(i);
+
+                String nombre = (String) item.get("nombre");
+                String fecha = (String) item.get("fecha");
+                String monto = (String) item.get("monto");
+
+                listItem = new ListItem(nombre, monto, fecha);
+
+                data_lista.add(listItem);
+
+            }
+        }
+        catch (Exception e) {
+
+        }
+
+        return data_lista;
 
     }
 
