@@ -57,7 +57,7 @@ public class App_View extends LinearLayout {
         buscador.add_listener("toggle_lupa", (lupa) -> {
 
             boolean state = (boolean) lupa.getTag();
-            //lista_view.animar_button(state);
+            lista_view.animar_button(state);
 
             if (state) {
                 lista_view.data_default();

@@ -1,5 +1,8 @@
 package com.example.interfaz.IUcomponents;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 
 import android.os.Handler;
@@ -16,7 +19,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +46,7 @@ public class Lista_View extends ConstraintLayout {
 
     private RecyclerView lista;
     private AdapterYape adp_yape;
+
 
     public Lista_View(Context context, AttributeSet atr) {
 
@@ -66,6 +73,11 @@ public class Lista_View extends ConstraintLayout {
 
         lista = this.findViewById(R.id.lista_recycler);
 
+
+
+
+
+
         adp_yape = new AdapterYape();
         lista.setAdapter(adp_yape);
         lista.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -87,18 +99,21 @@ public class Lista_View extends ConstraintLayout {
     public void filtrar_data(String filtro) {
 
         adp_yape.filtrar_data(filtro);
+        lista.scrollToPosition(0);
 
     }
+
 
 
     public void data_default() {
         adp_yape.default_data();
+        lista.scrollToPosition(0);
+
     }
 
     public void set_data(JSONArray data) {
-
         adp_yape.set_data(JsonToListObjetc(data));
-
+        lista.scrollToPosition(0);
     }
 
 

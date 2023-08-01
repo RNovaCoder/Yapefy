@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,8 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<ListItem> data;
     private List<ListItem> data_filtrada;
+
+    private Thread th_filtro = new Thread();
 
     private boolean state_data; // Bandera para indicar si el primer ítem será morado
 
@@ -59,14 +62,20 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // Este método se encarga de asociar los datos a cada vista (ViewHolder) en la lista
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ListItem item = data.get(position);
+
+
+
+        ListItem item = (state_data) ? data.get(position) : data_filtrada.get(position);
+
         if (holder.getItemViewType() == ITEM_GRANDE) {
             GrandeViewHolder grandeViewHolder = (GrandeViewHolder) holder;
+            setFadeAnimation(grandeViewHolder.itemView);
             grandeViewHolder.nombre.setText(item.get_nombre());
             grandeViewHolder.monto.setText(item.get_monto());
             grandeViewHolder.fecha.setText(item.get_fecha());
         } else {
             DefaultViewHolder defaultViewHolder = (DefaultViewHolder) holder;
+            setFadeAnimation(defaultViewHolder.itemView);
             defaultViewHolder.nombre.setText(item.get_nombre());
             defaultViewHolder.monto.setText(item.get_monto());
             defaultViewHolder.fecha.setText(item.get_fecha());
@@ -75,10 +84,17 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return data.size();
+        int size = (state_data) ? data.size() : data_filtrada.size();
+        return size;
     }
 
-    // ViewHolder para el primer ítem, que será morado
+    public void setFadeAnimation(View view) {
+        AlphaAnimation anim = new AlphaAnimation(0.5f, 1.0f);
+        anim.setDuration(200);
+        view.startAnimation(anim);
+    }
+
+    // ViewHolder para el primer ítem, que será Grande
     private static class GrandeViewHolder extends RecyclerView.ViewHolder {
         TextView nombre;
         TextView monto;
@@ -116,17 +132,42 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void filtrar_data (String filtro) {
 
-        //Posible thead
+
         data_filtrada.clear();
-        for (ListItem item: data) {
-            if (item.comprobar (filtro)) {
+        for (ListItem item : data) {
+            if (item.comprobar(filtro)) {
                 data_filtrada.add(item);
-            };
+            }
         }
+
         state_data = false;
 
-        //Posible handler
         notifyDataSetChanged();
+
+        //Posible thead
+
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        new Thread(() -> {
+
+            data_filtrada.clear();
+            for (ListItem item : data) {
+                if (item.comprobar(filtro)) {
+                    data_filtrada.add(item);
+                }
+            }
+            state_data = false;
+
+            handler.post(() -> {
+                notifyDataSetChanged();
+            });
+
+
+        }).start();
+
+
+
+
 
     }
 
