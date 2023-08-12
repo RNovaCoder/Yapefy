@@ -20,11 +20,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.example.interfaz.IUcomponents.Buscador
+        <com.novacoder.looptransaction.IUcomponents.app.Buscador
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </com.example.interfaz.IUcomponents.Buscador>
+        </com.novacoder.looptransaction.IUcomponents.app.Buscador>
 
         <LinearLayout
             android:id="@+id/Content"

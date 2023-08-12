@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.interfaz.IUcomponents.App_View
+    <com.novacoder.looptransaction.IUcomponents.app.AppView
         android:layout_width="match_parent"
         android:fitsSystemWindows="true"
         android:layout_height="match_parent">
 
 
 
-    </com.example.interfaz.IUcomponents.App_View>
+    </com.novacoder.looptransaction.IUcomponents.app.AppView>
 
 </merge>
