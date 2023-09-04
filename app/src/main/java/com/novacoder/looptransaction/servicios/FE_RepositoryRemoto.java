@@ -13,7 +13,7 @@ public class FE_RepositoryRemoto {
     public static Context contexto;
     public static RepositoryRemoto repo_remoto;
 
-    static public void inicializar(Context context){
+    static public void inicializar(Context context) {
         contexto = context;
         repo_remoto = RepositoryRemoto1.getInstance(contexto);
     }

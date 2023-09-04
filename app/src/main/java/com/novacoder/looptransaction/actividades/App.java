@@ -1,26 +1,27 @@
 package com.novacoder.looptransaction.actividades;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.novacoder.looptransaction.R;
+import com.novacoder.looptransaction.servicios.Call_Response;
 
 public class App extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent socket_rep = new Intent(getApplicationContext(), Socket_Reproductor.class);
-        startService(socket_rep);
-
+        Call_Response.inicializar(this);
         // Establecer el ViewGroup personalizado como contenido de la actividad
         setContentView(R.layout.activity_app);
         getSupportActionBar().hide();
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Call_Response.destruir();
     }
 
 }

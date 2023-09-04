@@ -9,6 +9,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.novacoder.looptransaction.ConfigApp;
+import com.novacoder.looptransaction.IUcomponents.app.cuerpoViews.config.Config;
 
 
 import org.json.JSONArray;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class Enrutador {
 
     static RequestQueue manager_request;
+    static Context contexto;
     static boolean ocupado = false;
     static String api_point ="https://webprized.com/yapeNot/get.php";
     @FunctionalInterface
@@ -27,17 +30,18 @@ public class Enrutador {
         void run(JSONArray data);
     }
 
-    private Enrutador (Context context){
-        manager_request = Volley.newRequestQueue(context);
-    }
 
     static public void inicializar (Context context){
+        contexto = context;
         if (manager_request == null){
-            new Enrutador(context);
+            manager_request = Volley.newRequestQueue(context);
         }
     }
 
-
+    static public void destruir (){
+        contexto = null;
+        manager_request = null;
+    }
 
     static public void traer_data (Run run) {
 
@@ -51,14 +55,14 @@ public class Enrutador {
                     public void onResponse(String response) {
 
                         ocupado = false;
-                        Log.d("VALOR RESPONSE ", response);
+                        //Log.d("VALOR RESPONSE ", response);
 
                         try {
                             JSONArray respuesta = new JSONArray(response);
                             run.run(respuesta);
 
                         } catch (JSONException e) {
-                            Log.d("ERROR AL CREAR JSON",e.getMessage());
+                            //Log.d("ERROR AL CREAR JSON",e.getMessage());
                         }
 
                     }
@@ -68,7 +72,7 @@ public class Enrutador {
                     public void onErrorResponse(VolleyError error) {
                         ocupado = false;
 
-                        Log.d("ERROR EN ENVÍO: " ,  "Server Error");
+                        //Log.d("ERROR EN ENVÍO: " ,  "Server Error");
 
                     }
                 }
@@ -87,7 +91,7 @@ public class Enrutador {
 
                 // on below line we are passing our key
                 // and value pair to our parameters.
-                params.put("Cant", "150");
+                params.put("Cant", ConfigApp.get(ConfigApp.KEY_NUM_TRANSACCIONES));
 
                 return params;
             }
@@ -95,7 +99,7 @@ public class Enrutador {
         };
 
 
-        Log.d("NUMERO SOLICTUDES ", String.valueOf(manager_request.getSequenceNumber()));
+        //Log.d("NUMERO SOLICTUDES ", String.valueOf(manager_request.getSequenceNumber()));
 
 
         if (!ocupado) {

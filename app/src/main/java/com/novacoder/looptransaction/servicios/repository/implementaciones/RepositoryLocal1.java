@@ -1,6 +1,7 @@
 package com.novacoder.looptransaction.servicios.repository.implementaciones;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,6 +10,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.novacoder.looptransaction.ConfigApp;
 import com.novacoder.looptransaction.servicios.FactoryTransacciones;
 import com.novacoder.looptransaction.servicios.repository.RepositoryLocal;
 import com.novacoder.looptransaction.servicios.transacciones.Transaccion;
@@ -63,11 +65,13 @@ public class RepositoryLocal1 extends SQLiteOpenHelper implements RepositoryLoca
 
         for (Transaccion transaccion: transacciones) {
 
-            if (comprobar_id(transaccion)) {
+            if (!(comprobar_id(transaccion))) {
 
                 tabla = transaccion.get_tipo();
 
                 ContentValues valores = transaccion.format_sql();
+
+                //Log.d("DATOS Y RECUPERADO", String.valueOf(valores));
 
                 try {
                     db_write.insertOrThrow(tabla, null, valores);
@@ -104,30 +108,67 @@ public class RepositoryLocal1 extends SQLiteOpenHelper implements RepositoryLoca
     public synchronized ArrayList<Transaccion> transacciones_a_enviar() {
 
         ArrayList<Transaccion> Transacciones = new ArrayList<>();
-        ArrayList<String> tablas = getAllTables(db_read);
+        String[] tablas = ConfigApp.models;
 
         for (String tabla : tablas) {
 
             String query = "SELECT * FROM " + tabla + " WHERE estado = ?";
-            String[] Args = {"pendiente"};
+            String[] Args = {this.ESTADO_PENDIENTE};
 
             Cursor cursor = executar_sql(query, Args, null);
 
-            if (cursor.moveToFirst()) {
-                do {
-                    try {
+            try {
+                if (cursor.moveToFirst()) {
+                    do {
                         Transacciones.add(FactoryTransacciones.crear_transaccion(/*tabla=tipo*/tabla, cursor));
-                    } catch (Exception e) {
-                        Log.d ("Transacciones a Enviar: ", e.getMessage());
-                    }
-                } while (cursor.moveToNext());
+
+                    } while (cursor.moveToNext());
+                    cursor.close();
+                }
+
             }
-            cursor.close();
-            // Liberando Cursor
+
+            catch (Exception e) {
+                //Log.d ("Transaccioes a Enviar: ", e.getMessage());
+            }
 
         }
 
         return  Transacciones;
+    }
+
+    public synchronized void limpiarRegistro() {
+
+        String[] tablas = ConfigApp.models;
+
+        for (String tabla : tablas) {
+
+            String query = "SELECT * FROM " + tabla + " WHERE estado = ?";
+            String[] Args = {this.ESTADO_ENVIADO};
+            Cursor cursor = executar_sql(query, Args, null);
+
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    long id = cursor.getLong(cursor.getColumnIndexOrThrow("_id"));
+                    String fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"));
+
+                    long diferencia = dateDifference(fecha);
+
+                    if (diferencia > 25) {
+                        //Log.d("CANTIDAD DATE", String.valueOf(diferencia));
+                        limpiar(id, tabla);
+                    }
+
+                }
+                cursor.close();
+            }
+        }
+    }
+
+    public synchronized void limpiar(long id, String tabla) {
+        String query = "UPDATE " + tabla + " SET estado = ? WHERE _id = ?";
+        String[] Args = {this.ESTADO_PENDIENTE, String.valueOf(id)};
+        executar_sql(query, Args, null);
     }
 
     public synchronized void transaction_set_estado(Transaccion transaccion, String estado) {
@@ -163,9 +204,12 @@ public class RepositoryLocal1 extends SQLiteOpenHelper implements RepositoryLoca
         } catch (SQLiteException e) {
 
             if (e.getMessage().contains("no such table")){
-                Log.d("TEST SQLLLL:", e.getMessage());
-                crearTabla(transaccion);
-                cursor = executar_sql(sentence_sql, arg, transaccion);
+                //Log.d("TEST SQLLLL:", e.getMessage());
+                if (transaccion != null) {
+                    crearTabla(transaccion);
+                    cursor = executar_sql(sentence_sql, arg, transaccion);
+                }
+
             }
             else {System.out.print(e.getMessage());}
 
@@ -175,52 +219,20 @@ public class RepositoryLocal1 extends SQLiteOpenHelper implements RepositoryLoca
 
     }
 
-    public void leer_tabla (Context context, String tipo){
+    static public void leer_tabla (String tipo) {
 
 
-        String nombreTabla = tipo;
-        String[] columnas = null; // Obtener todas las columnas
-        String selection = null; // Sin condición
-        String[] selectionArgs = null;
-        String sortOrder = null; // Sin ordenamiento
-
-        Cursor cursor = db_read.query(
-                nombreTabla,
-                columnas,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder
-        );
-
-        cursor.moveToFirst();
-
-        do {
-            // Obtener los valores de las columnas para cada fila
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
-            String transaccion_id = cursor.getString(cursor.getColumnIndexOrThrow("transaccion_id"));
-            String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
-            String monto = cursor.getString(cursor.getColumnIndexOrThrow("monto"));
-            String fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"));
-            String estado = cursor.getString(cursor.getColumnIndexOrThrow("estado"));
-
-            boolean sonido = 1 == cursor.getInt(cursor.getColumnIndexOrThrow("sonido"));
-
-            Log.d("INICIO INFO NOTIFI", "INICIO");
-            Log.d("ID", String.valueOf(id));
-            Log.d("ID_yape", transaccion_id);
-            Log.d("Nombre", nombre);
-            Log.d("Monto", monto);
-            Log.d("Fecha", fecha);
-            Log.d("Estado", estado);
-
-            Log.d("FINAL INFO NOTIFI", "FINAAAL");
-
-        } while (cursor.moveToNext());
+        Cursor cursor = db_read.rawQuery("SELECT * FROM " + tipo, null);
+        if (cursor.moveToFirst()) {
+            int columnCount = cursor.getColumnCount();
+            do {
+                for (int i = 0; i < columnCount; i++) {
+                    String columnName = cursor.getColumnName(i);
+                    String columnValue = cursor.getString(i);
+                    //Log.d("LEER TABLA", columnName + ": " + columnValue);
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
     }
-
-
-
-
 }

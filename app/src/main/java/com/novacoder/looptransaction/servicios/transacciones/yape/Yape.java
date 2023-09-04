@@ -10,6 +10,7 @@ import com.novacoder.looptransaction.servicios.transacciones.Transaccion;
 
 import org.apache.commons.text.WordUtils;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -89,10 +90,8 @@ public class Yape extends Transaccion {
         String monto = mesj.substring(pos_monto + 3).trim();
         double numero = Double.parseDouble(monto);
 
-        if (numero % 1 != 0) {
-            monto = String.format(Locale.US, "%.2f", numero);
-        }
-
+        DecimalFormat formato = new DecimalFormat("0.00");
+        monto = formato.format(numero);
         return monto;
     }
 

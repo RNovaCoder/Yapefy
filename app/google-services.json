@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "550744392842",
+    "project_id": "trasactionapp",
+    "storage_bucket": "trasactionapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550744392842:android:1127a2a1afa7368c235973",
+        "android_client_info": {
+          "package_name": "com.novacoder.looptransaction"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "550744392842-u34qfo0mjhj7tkre8p5qeji1oo78veqs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.novacoder.looptransaction",
+            "certificate_hash": "5cf33d19949618202265c392d2b2728e406e5044"
+          }
+        },
+        {
+          "client_id": "550744392842-a90agcgnlhbs80ssphku5d4uoei6un7q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeoCmQLcK4iK27r6la9DLGL5P-X65IkhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "550744392842-a90agcgnlhbs80ssphku5d4uoei6un7q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 package com.novacoder.looptransaction.servicios;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
@@ -10,25 +11,44 @@ public class RepTts implements TextToSpeech.OnInitListener {
 
     static private Context contexto;
     static private TextToSpeech textToSpeech;
-    private RepTts (){
+
+    private RepTts() {
     }
 
-    static public void inicializar (Context context) {
+    static public void inicializar(Context context) {
         contexto = context;
         if (textToSpeech == null) {
             textToSpeech = new TextToSpeech(contexto, new RepTts());
         }
     }
 
-    static public void Speak (String texto){
+    static public void destruir() {
+        contexto = null;
+        textToSpeech.stop();
+        textToSpeech.shutdown();
+        textToSpeech = null;
+    }
+
+    static public TextToSpeech getInstance() {
+        return textToSpeech;
+    }
+
+    static public void Speak(String texto) {
 
         if (textToSpeech == null) {
             textToSpeech = new TextToSpeech(contexto, new RepTts());
         }
-        textToSpeech.speak(texto, TextToSpeech.QUEUE_ADD, null, null);
-        textToSpeech.stop();
+
+
+        textToSpeech.setSpeechRate(2.0F);
+        Bundle params = new Bundle();
+        params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 2.0F);
+
+
+        textToSpeech.speak(texto, TextToSpeech.QUEUE_ADD, params, null);
+       /* textToSpeech.stop();
         textToSpeech.shutdown();
-        textToSpeech = null;
+        textToSpeech = null;*/
     }
 
 

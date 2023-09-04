@@ -15,12 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.novacoder.looptransaction.Auth.Router;
 import com.novacoder.looptransaction.IUcomponents.app.cuerpoViews.listaItems.yape.AdapterYape;
 import com.novacoder.looptransaction.IUcomponents.app.cuerpoViews.listaItems.yape.ItemDataYape;
 import com.novacoder.looptransaction.R;
 import com.novacoder.looptransaction.IUcomponents.Enrutador;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ import java.util.List;
 
 public class Cuerpo extends ConstraintLayout {
 
-    static LayoutInflater manager_xml;
+    private LayoutInflater manager_xml;
     private Button cargar_pagos;
     private ScrollView cont_config;
     private RecyclerView lista;
@@ -52,10 +55,8 @@ public class Cuerpo extends ConstraintLayout {
 
     private void inicializar() {
 
-        Enrutador.inicializar(getContext());
-
         manager_xml = LayoutInflater.from(this.getContext());
-        manager_xml.inflate(R.layout.list_view, this, true);
+        manager_xml.inflate(R.layout.cuerpo, this, true);
 
         cargar_pagos = this.findViewById(R.id.cargar_pagos);
         cont_config = this.findViewById(R.id.cont_config);
@@ -68,15 +69,18 @@ public class Cuerpo extends ConstraintLayout {
         lista.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-        cargar_pagos.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Enrutador.traer_data((json) -> {
+        cargar_pagos.setOnClickListener(view -> {
+            Router router = new Router(getContext());
+            router.setResponse(response -> {
+                try {
+                    set_data(new JSONArray((String) response));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            router.getData();
+            router.send();
 
-                    set_data(json);
-
-                });
-            }
         });
 
         cargar_pagos.performClick();

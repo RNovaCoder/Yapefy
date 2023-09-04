@@ -14,7 +14,7 @@ public class Reproductor {
 
     private MediaPlayer mediaPlayer = new MediaPlayer();
     static private ArrayList<String> sounds = new ArrayList();
-    private Thread th_notificationes;
+    static private Thread th_notificationes;
     static private Context contexto;
     static private Reproductor instancia;
 
@@ -23,18 +23,24 @@ public class Reproductor {
         escuchador();
     }
 
-    static public void inicializar(Context context){
-        if (instancia == null){
+    static public void inicializar(Context context) {
+        if (instancia == null) {
             contexto = context;
             instancia = new Reproductor();
         }
     }
 
-    static public void notificar_audio (String audio) {
+    static public void destruir() {
+        contexto = null;
+        instancia = null;
+    }
+
+
+    static public void notificar_audio(String audio) {
         sounds.add(audio);
     }
 
-    public void escuchador (){
+    public void escuchador() {
 
         //Configura la salida de audio por el canal de Notificaciones
         AudioAttributes audioAttributes;
@@ -48,13 +54,12 @@ public class Reproductor {
 
 
         //Inicio del Thread o servicio
-        th_notificationes = new Thread(new Runnable(){
+        th_notificationes = new Thread(new Runnable() {
             public void run() {
-                while(true) {
-                    if (sounds.size() != 0 && !(mediaPlayer.isPlaying())){
+                while (true) {
+                    if (sounds.size() != 0 && !(mediaPlayer.isPlaying())) {
                         play();
-                    }
-                    else {
+                    } else {
                         try {
                             Thread.sleep(300); // Pausar el hilo durante 300 milisegundos
                         } catch (InterruptedException e) {
@@ -84,8 +89,7 @@ public class Reproductor {
             sounds.remove(0);
             file.delete();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e("ERROR AUDIO", "AUDIO ERROR: : " + e.getMessage());
             sounds.remove(0);
         }

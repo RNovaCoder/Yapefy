@@ -11,16 +11,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class YapeOperaciones extends Operaciones {
 
 
     static private HashMap<String, String> ssml_remoto_template = new HashMap<String, String>() {{
-        put("c", "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"83%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+5dB\" pitch=\"-5%\" rate=\"65%\"> por, </prosody> <break time=\"80ms\"/><prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"81%\">  V_centimos céntimos  </prosody></emphasis> </speak>");
-        put("s", "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"83%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+3.4dB\" pitch=\"+5%\" rate=\"80%\"> por </prosody><break time=\"100ms\"/> <prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"67%\"> un sol.  </prosody></emphasis> </speak>");
-        put("ss", "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"84%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+4dB\" pitch=\"+5%\" rate=\"73%\"> por </prosody> <prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"81%\">  V_soles soles.  </prosody></emphasis> </speak>");
-        put("sc", "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"83%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+3.4dB\" pitch=\"+5%\" rate=\"80%\"> por </prosody><break time=\"100ms\"/> <prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"67%\"> un sol,  </prosody></emphasis> <emphasis level=\"strong\"> <break time=\"70ms\"/> <prosody volume=\"+4.4dB\" pitch=\"+3%\" rate=\"75%\">' con V_centimos ' </prosody></emphasis> </speak>");
-        put("ssc", "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"83%\" volume=\"+4.7dB\">' V_nombres  '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+4dB\" pitch=\"+5%\" rate=\"75%\"> por </prosody> <prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"83%\"> V_soles soles,  </prosody></emphasis> <emphasis level=\"strong\"> <break time=\"50ms\"/> <prosody volume=\"+5dB\" pitch=\"+3%\" rate=\"88%\">' con V_centimos.' </prosody></emphasis> </speak>");
+        put("c"  , "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"83%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+5dB\"   pitch=\"-5%\" rate=\"65%\"> por, </prosody> <break time=\"80ms\"/><prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"81%\">  V_centimos céntimos  </prosody></emphasis> </speak>");
+        put("s"  , "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"83%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+3.4dB\" pitch=\"+5%\" rate=\"80%\"> por </prosody><break time=\"100ms\"/> <prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"67%\"> un sol.  </prosody></emphasis> </speak>");
+        put("ss" , "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"84%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+4dB\"   pitch=\"+5%\" rate=\"73%\"> por </prosody> <prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"81%\">  V_soles soles.  </prosody></emphasis> </speak>");
+        put("sc" , "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"83%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+3.4dB\" pitch=\"+5%\" rate=\"80%\"> por </prosody><break time=\"100ms\"/> <prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"67%\"> un sol,  </prosody></emphasis> <emphasis level=\"strong\"> <break time=\"70ms\"/> <prosody volume=\"+4.4dB\" pitch=\"+3%\" rate=\"75%\">' con V_centimos ' </prosody></emphasis> </speak>");
+        put("ssc", "<speak> <prosody volume=\"+7dB\" pitch=\"+5%\" rate=\"90%\"> ' Nuevo Yápe ! ' </prosody> <emphasis level=\"strong\"> <prosody volume=\"+6dB\" pitch=\"-10%\" rate=\"86%\">\" dé  \"</prosody> <break time=\"150ms\"/> <prosody pitch=\"-5%\" rate=\"83%\" volume=\"+4.7dB\">' V_nombres '</prosody> </emphasis> <break time=\"200ms\"/><emphasis level=\"strong\"><prosody volume=\"+4dB\"   pitch=\"+5%\" rate=\"75%\"> por </prosody> <prosody volume=\"+5.7dB\" pitch=\"+5%\" rate=\"83%\"> V_soles soles,  </prosody></emphasis> <emphasis level=\"strong\"> <break time=\"50ms\"/> <prosody volume=\"+5dB\" pitch=\"+3%\" rate=\"88%\">' con V_centimos.' </prosody></emphasis> </speak>");
     }};
 
     @Override
@@ -57,8 +59,8 @@ public class YapeOperaciones extends Operaciones {
 
         ContentValues values = new ContentValues();
         //por DEFAULT
-        values.put("trasaccion_id", yape.transaccion_id);
-        values.put("estado", "pendiente");
+        values.put("transaccion_id", yape.transaccion_id);
+        values.put("estado", this.ESTADO_PENDIENTE);
 
         //Propios
         values.put("nombre", yape.nombre);
@@ -71,7 +73,7 @@ public class YapeOperaciones extends Operaciones {
 
     @Override
     public String ssml_local(Transaccion transaccion) {
-        return null;
+        return applyRateSum(ssml_remoto(transaccion), 30);
     }
 
     @Override
@@ -116,6 +118,24 @@ public class YapeOperaciones extends Operaciones {
 
         return template;
 
+    }
+
+    public static String applyRateSum(String ssml, int sumaRate) {
+        // Regular expression to match rate attributes
+        String ratePattern = "rate=\"([\\d.]+)%\"";
+        Pattern pattern = Pattern.compile(ratePattern);
+        Matcher matcher = pattern.matcher(ssml);
+
+        // Replace rate attributes with updated values
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            double rateValue = Double.parseDouble(matcher.group(1)) + sumaRate;
+            int roundedRate = (int) Math.round(rateValue);
+            matcher.appendReplacement(sb, "rate=\"" + roundedRate + "%\"");
+        }
+        matcher.appendTail(sb);
+
+        return sb.toString();
     }
 
 

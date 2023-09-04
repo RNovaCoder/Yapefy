@@ -28,17 +28,22 @@ public class AppView extends LinearLayout {
     }
 
     public void inicializador () {
-        setOrientation(LinearLayout.VERTICAL);
+        setOrientation(VERTICAL);
 
-        // Establecer el ancho y alto a "match_parent" (LayoutParams.MATCH_PARENT)
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, // Ancho: MATCH_PARENT
-                LinearLayout.LayoutParams.MATCH_PARENT  // Altura: MATCH_PARENT
+        setLayoutParams(new LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT)
         );
-        setLayoutParams(layoutParams);
+
 
         manager_xml = LayoutInflater.from(this.getContext());
         manager_xml.inflate(R.layout.app_layout, this, true);
+
+        SetListeners();
+
+    }
+
+    private void SetListeners (){
 
         Buscador buscador = this.findViewById(R.id.buscador);
         Cuerpo cuerpo = this.findViewById(R.id.lista);
@@ -61,7 +66,5 @@ public class AppView extends LinearLayout {
             boolean state = (boolean) config.getTag();
             cuerpo.animar_config(!state);
         });
-
     }
-
 }

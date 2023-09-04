@@ -1,37 +1,72 @@
 package com.novacoder.looptransaction;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.novacoder.looptransaction.actividades.App;
+import com.novacoder.looptransaction.actividades.Login;
 
 import org.json.JSONException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String Token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-
-        findViewById(R.id.cargar_pagos).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actualizar_vista();
-            }
-        });
-
+        if (!isNotificationServiceEnabled()) {
+            Intent intentSetting = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            startActivityForResult(intentSetting, 4);
+        } else {
+            inicializar();
+        }
     }
 
-    public void crear_items (String datos) throws JSONException {
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        inicializar();
     }
 
-    public void actualizar_vista () {
-
-
-
+    private boolean isNotificationServiceEnabled() {
+        String pkgName = getPackageName();
+        String flat = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
+        if (flat != null) {
+            return flat.contains(pkgName);
+        }
+        return false;
     }
+
+    private void inicializar() {
+
+        //ConfigApp.inicializar(getApplicationContext());
+
+        Token = ConfigApp.get(ConfigApp.KEY_TOKEN);
+
+        Intent intent;
+
+        if (Token == null) {
+            intent = new Intent(this, Login.class);
+        } else {
+            intent = new Intent(this, App.class);
+        }
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+        //Log.d("signError", "ACTIVIDA PRINCIAPL");
+        finish();
+    }
+
+
 }

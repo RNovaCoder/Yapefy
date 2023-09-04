@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.service.notification.StatusBarNotification;
 
+import com.novacoder.looptransaction.ConfigApp;
+
 import org.json.JSONObject;
 
 public abstract class Transaccion implements Cloneable {
@@ -12,7 +14,6 @@ public abstract class Transaccion implements Cloneable {
     static public String tipo;
     static public Operaciones operador;
     static public String columnas;
-
     public int _id;
     public long transaccion_id;
 
@@ -30,7 +31,7 @@ public abstract class Transaccion implements Cloneable {
                 tipo +
                 " (" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "trasaccion_id INTEGER, " +
+                "transaccion_id INTEGER, " +
                 "estado TEXT, " +
                 columnas +
                 ")";

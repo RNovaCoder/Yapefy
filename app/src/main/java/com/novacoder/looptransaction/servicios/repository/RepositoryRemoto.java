@@ -1,12 +1,14 @@
 package com.novacoder.looptransaction.servicios.repository;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.novacoder.looptransaction.ConfigApp;
+import com.novacoder.looptransaction.servicios.Call_Response;
 import com.novacoder.looptransaction.servicios.FE_RepositoryLocal;
 import com.novacoder.looptransaction.servicios.transacciones.Transaccion;
 
@@ -19,18 +21,16 @@ import java.util.Map;
 public abstract class RepositoryRemoto {
 
     static public RequestQueue objet_http;
-
+    static String ESTADO_ENVIADO = ConfigApp.ESTADO_ENVIADO;
 
     public void enviar_registros (ArrayList<Transaccion> transacciones){
 
         for (Transaccion transaccion: transacciones) {
 
-            FE_RepositoryLocal.transaction_set_estado(transaccion, "enviado");
-
             Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Call_Response.response(response,transaccion);
+                    Call_Response.response(response, transaccion);
                 }
             };
 
@@ -46,9 +46,10 @@ public abstract class RepositoryRemoto {
             JsonObjectRequest jsonRequest = crear_jsonRequest(postData, listener, errorListener);
             objet_http.add(jsonRequest);
 
+            //Cambiar el Estado a Enviado
+            FE_RepositoryLocal.set_estado_enviado(transaccion);
+
         }
-
-
     }
 
     private JsonObjectRequest crear_jsonRequest (JSONObject postData,
@@ -67,11 +68,24 @@ public abstract class RepositoryRemoto {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "Bearer " + token);
-                headers.put("Content-Type", "application/json");
+                headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("Accept", "application/json");
+                headers.put("Content-Length", Integer.toString(postData.toString().getBytes().length)); // Longitud del cuerpo
+
+                Map<String, String> defaultHeaders = super.getHeaders();
+                headers.putAll(defaultHeaders);
+
                 return headers;
             }
+
         };
+
+        json_request.setRetryPolicy(new DefaultRetryPolicy(
+                20000,  // Timeout en milisegundos
+                0,      // Cantidad máxima de reintentos (0 para no reintentar)
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT  // Factor de aumento gradual del timeout
+        ));
+        json_request.setShouldCache(false);
 
         return json_request;
     }

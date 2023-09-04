@@ -49,7 +49,6 @@ public class Buscador extends LinearLayout {
 
         manager_xml = LayoutInflater.from(this.getContext());
         manager_xml.inflate(R.layout.buscador, this, true);
-
         setBackgroundColor(0xFF600773);
 
         lupa =  this.findViewById(R.id.lupa);
@@ -180,7 +179,7 @@ public class Buscador extends LinearLayout {
             accion.run(target);
         }
 
-        Log.d("EVENTO EJECUTADO::  " , evento);
+        //Log.d("EVENTO EJECUTADO::  " , evento);
 
     }
 
