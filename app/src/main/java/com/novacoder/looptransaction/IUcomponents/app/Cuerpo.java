@@ -26,8 +26,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class Cuerpo extends ConstraintLayout {
@@ -155,7 +159,7 @@ public class Cuerpo extends ConstraintLayout {
                 JSONObject item = data.getJSONObject(i);
 
                 String nombre = (String) item.get("nombre");
-                String fecha = (String) item.get("fecha");
+                String fecha = formatDate((String) item.get("fecha"));
                 String monto = (String) item.get("monto");
 
                 listItem = new ItemDataYape(nombre, monto, fecha);
@@ -168,6 +172,33 @@ public class Cuerpo extends ConstraintLayout {
 
         return data_lista;
 
+    }
+
+    public String formatDate(String fechaOriginal) {
+        try {
+            SimpleDateFormat sdfOriginal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date fechaPublicacion = sdfOriginal.parse(fechaOriginal);
+
+
+            SimpleDateFormat sdfNuevo = new SimpleDateFormat("d MMM. yyyy - h:mm a",Locale.getDefault());
+            String fechaFormateada = sdfNuevo.format(fechaPublicacion);
+
+            // Corregir el doble punto después del mes
+            fechaFormateada = fechaFormateada.replace("..", ".");
+
+            // Capitalizar la primera letra del mes
+            String[] partes = fechaFormateada.split(" ");
+            if (partes.length >= 2) {
+                partes[1] = partes[1].substring(0, 1).toUpperCase() + partes[1].substring(1);
+                fechaFormateada = partes[0] + " " + partes[1] + " " + partes[2] + " " + partes[3] + " " + partes[4] + " " + partes[5];
+                fechaFormateada = fechaFormateada.replaceAll("\\s+", " ");
+                fechaFormateada = (fechaFormateada.replace("p. m.", "pm")).replace("a. m.", "am");
+            }
+
+            return fechaFormateada;
+        } catch (ParseException e) {
+            return "";
+        }
     }
 
 

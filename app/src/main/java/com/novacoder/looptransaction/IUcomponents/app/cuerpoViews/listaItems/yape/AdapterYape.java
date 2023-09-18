@@ -11,8 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.novacoder.looptransaction.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM_GRANDE = 1;
@@ -166,18 +170,18 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         th_filtro.start();
 
-
     }
 
 
     public void default_data () {
-
         if (!state_data) {
             state_data = true;
             notifyDataSetChanged();
         }
-
     }
+
+
+
 
 
 }

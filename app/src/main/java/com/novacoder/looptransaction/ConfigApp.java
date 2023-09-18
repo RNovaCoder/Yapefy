@@ -16,7 +16,7 @@ public class ConfigApp {
     static public String KEY_URL_BACKEND = "Url Backend";
     static public String KEY_NUM_TRANSACCIONES = "Número de Transacciones";
     static public String KEY_G_CORREO = "googleCorreo";
-    static public String APP_TOKEN_LOCAL = "123456789";
+    static public String APP_TOKEN_LOCAL = "K6D82B1M7I";
     static public String KEY_TOKEN = "Token";
     static public String KEY_SONIDO = "Tipo de Notificación";
     static public String URL_BACKEND = "https://yape.webprized.com/api/transaccion/registrar";
