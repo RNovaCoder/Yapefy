@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,8 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (!isNotificationServiceEnabled()) {
-            Intent intentSetting = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-            startActivityForResult(intentSetting, 4);
+            dar_permisos();
         } else {
             inicializar();
         }
@@ -35,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        inicializar();
+        if (!isNotificationServiceEnabled()) {
+            dar_permisos();
+        } else {
+            inicializar();
+        }
     }
 
     private boolean isNotificationServiceEnabled() {
@@ -66,6 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
         //Log.d("signError", "ACTIVIDA PRINCIAPL");
         finish();
+    }
+
+    private void dar_permisos () {
+        Toast myToast = Toast.makeText(getApplicationContext(), "Debes conceder este permiso para poder continuar", Toast.LENGTH_SHORT);
+        myToast.show();
+        Intent intentSetting = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        startActivityForResult(intentSetting, 4);
     }
 
 

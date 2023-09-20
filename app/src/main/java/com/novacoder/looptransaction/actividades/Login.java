@@ -46,7 +46,6 @@ public class Login extends AppCompatActivity {
 
         mSignInClient = GoogleSignIn.getClient(this, options);
 
-
         SignInButton signB = findViewById(R.id.signButton);
         signB.setOnClickListener(view -> {
             signIn();
