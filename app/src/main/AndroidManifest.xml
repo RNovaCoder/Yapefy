@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
+        android:name=".AppInicializador"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enabled="true"
@@ -34,7 +35,7 @@
             android:exported="true" />
 
         <service
-            android:name=".Point_Servicio"
+            android:name=".PointServicio"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"

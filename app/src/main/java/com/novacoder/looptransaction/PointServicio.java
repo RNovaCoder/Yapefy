@@ -5,19 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
 
 import com.novacoder.looptransaction.servicios.FE_RepositoryLocal;
 import com.novacoder.looptransaction.servicios.FE_RepositoryRemoto;
 import com.novacoder.looptransaction.servicios.FactoryTransacciones;
 import com.novacoder.looptransaction.servicios.RepTts;
 import com.novacoder.looptransaction.servicios.Reproductor;
-import com.novacoder.looptransaction.servicios.repository.implementaciones.RepositoryLocal1;
 import com.novacoder.looptransaction.servicios.transacciones.Transaccion;
 
 import java.util.ArrayList;
 
-public class Point_Servicio extends NotificationListenerService {
+public class PointServicio extends NotificationListenerService {
 
     private Context serv_contexto;
     private Thread Th_servicio;
@@ -44,7 +42,6 @@ public class Point_Servicio extends NotificationListenerService {
         //Pasando el contexto necesario para inicializar los sub-servicios
         RepTts.inicializar(serv_contexto);
         Reproductor.inicializar(serv_contexto);
-        ConfigApp.inicializar(serv_contexto);
         FE_RepositoryLocal.inicializar(serv_contexto);
         FE_RepositoryRemoto.inicializar(serv_contexto);
 
@@ -118,7 +115,6 @@ public class Point_Servicio extends NotificationListenerService {
     public void onDestroy() {
         super.onDestroy();
         FlagService = false;
-        ConfigApp.contexto = null;
         FE_RepositoryLocal.contexto = null;
         FE_RepositoryRemoto.contexto = null;
         Reproductor.destruir();

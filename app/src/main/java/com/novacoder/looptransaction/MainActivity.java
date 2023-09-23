@@ -20,26 +20,18 @@ import org.json.JSONException;
 public class MainActivity extends AppCompatActivity {
 
     private String Token;
+    private String Mensaje = "Debes conceder este permiso para poder continuar";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (!isNotificationServiceEnabled()) {
-            dar_permisos();
-        } else {
-            inicializar();
-        }
+        main();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (!isNotificationServiceEnabled()) {
-            dar_permisos();
-        } else {
-            inicializar();
-        }
+        main();
     }
 
     private boolean isNotificationServiceEnabled() {
@@ -53,10 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void inicializar() {
 
-        //ConfigApp.inicializar(getApplicationContext());
-
         Token = ConfigApp.get(ConfigApp.KEY_TOKEN);
-
         Intent intent;
 
         if (Token == null) {
@@ -72,11 +61,22 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+
     private void dar_permisos () {
-        Toast myToast = Toast.makeText(getApplicationContext(), "Debes conceder este permiso para poder continuar", Toast.LENGTH_SHORT);
+
+        Toast myToast = Toast.makeText(getApplicationContext(), Mensaje, Toast.LENGTH_SHORT);
         myToast.show();
         Intent intentSetting = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        intentSetting.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intentSetting, 4);
+    }
+
+    private void main () {
+        if (!isNotificationServiceEnabled()) {
+            dar_permisos();
+        } else {
+            inicializar();
+        }
     }
 
 
