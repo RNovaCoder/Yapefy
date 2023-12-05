@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">Yape Notificaciones</string>
-    <string name="name">Yape Notificaciones</string>
+    <string name="app_name">Yapefy</string>
+    <string name="name">Yapefy</string>
+    <string name="estado_actualizando">Actualizando pagos...</string>
+    <string name="estado_error">Error indeterminado</string>
+
 </resources>

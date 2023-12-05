@@ -211,7 +211,7 @@ public class RepositoryLocal1 extends SQLiteOpenHelper implements RepositoryLoca
                 }
 
             }
-            else {System.out.print(e.getMessage());}
+            else {}
 
         }
 

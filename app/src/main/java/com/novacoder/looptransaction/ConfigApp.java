@@ -14,7 +14,7 @@ public class ConfigApp {
     static private String SHARED_PREFERENCE = "Config";
     static public String KEY_NAME_MODEL = "Tipo de Transacción";
     static public String KEY_URL_BACKEND = "Url Backend";
-    static public String KEY_NUM_TRANSACCIONES = "Número de Transacciones";
+    static public String KEY_NUM_MESES = "Últimos meses";
     static public String KEY_G_CORREO = "googleCorreo";
     static public String APP_TOKEN_LOCAL = "K6D82B1M7I";
     static public String KEY_TOKEN = "Token";
@@ -23,7 +23,7 @@ public class ConfigApp {
     static public String URL_LOGIN = "https://yape.webprized.com/api/usuario/registrar";
     static public String URL_LOGOUT = "https://yape.webprized.com/api/usuario/cerrar.sesion";
     static public String URL_GET_DATA = "https://yape.webprized.com/api/transaccion/obtener";
-    static public String NUM_TRANSACCIONES = "3000";
+    static public String NUM_MESES = "5";
     static public String SONIDO_LOCAL = "Local";
     static public String SONIDO_REMOTO = "Remoto";
     static public String SONIDO_NULL = "Ninguno";
@@ -47,11 +47,21 @@ public class ConfigApp {
             //BCP_MODEL_NAME
     };
 
+    static public String[] meses = new String[]{
+            "Todos",
+            "Último mes",
+            "Últimos 2 meses",
+            "Últimos 5 meses",
+            "Últimos 8 meses",
+            "Último año"
+    };
+    static public int[] mesesIndex = new int[]{-1,1,2,5,8,12};
+
     static public HashMap<String, String> ConfigParams = new HashMap<String, String>() {{
         put(KEY_NAME_MODEL, YAPE_MODEL_NAME);
-        put(KEY_SONIDO, SONIDO_LOCAL);
+        put(KEY_SONIDO, SONIDO_REMOTO);
         put(KEY_URL_BACKEND, URL_BACKEND);
-        put(KEY_NUM_TRANSACCIONES, NUM_TRANSACCIONES);
+        put(KEY_NUM_MESES, NUM_MESES);
         put(KEY_G_CORREO, "");
         put(KEY_TOKEN, null);
     }};

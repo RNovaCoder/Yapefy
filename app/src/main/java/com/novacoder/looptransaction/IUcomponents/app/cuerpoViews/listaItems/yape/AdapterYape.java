@@ -2,6 +2,7 @@ package com.novacoder.looptransaction.IUcomponents.app.cuerpoViews.listaItems.ya
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,22 +18,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 
 public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM_GRANDE = 1;
     private static final int ITEM_DEFAULT = 2;
-
-    private List<ItemDataYape> data;
-    private List<ItemDataYape> data_filtrada;
+    private List<ItemDataYape> data = new ArrayList<>();
+    private List<ItemDataYape> data_filtrada = new ArrayList<>();;
 
     private Thread th_filtro = new Thread();
-
+    private Handler hiloUI = new Handler(Looper.getMainLooper());
     private boolean state_data; // Bandera para indicar si el primer ítem será morado
 
-    public AdapterYape() {
-        this.data = new ArrayList<ItemDataYape>();
-        this.data_filtrada = new ArrayList<ItemDataYape>();
-    }
+    public AdapterYape() {}
 
     // Este método determina el tipo de vista (diseño) para un ítem en la lista en función de su posición
     @Override
@@ -61,8 +59,6 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // Este método se encarga de asociar los datos a cada vista (ViewHolder) en la lista
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-
 
         ItemDataYape item = (state_data) ? data.get(position) : data_filtrada.get(position);
 
@@ -122,15 +118,33 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void set_data (List<ItemDataYape> updatedItems) {
-        data.clear(); // Borra los datos actuales en la lista
-        data.addAll(updatedItems); // Agrega los nuevos datos a la lista
+         // Borra los datos actuales en la lista
+
+        try {
+            data.clear();
+            data.addAll(updatedItems);
+        }
+        catch (Exception e){}
         this.state_data = true;
 
-        notifyDataSetChanged(); // Notifica al adaptador que los datos han cambiado
+        hiloUI.post(() -> {
+            notifyDataSetChanged();
+        }); // Notifica al adaptador que los datos han cambiado
+    }
+
+    public void detener_filter () {
+        //Se asegura de detener el hilo para interrumpirlo
+        th_filtro.interrupt();
+        hiloUI.removeCallbacksAndMessages(null);
+        try {
+            //Espera a que el hilo se detenga para continuar
+            th_filtro.join();
+        } catch (InterruptedException e) {}
     }
 
     public void filtrar_data (String filtro) {
 
+        hiloUI.removeCallbacksAndMessages(null);
         //Se asegura de detener el hilo para interrumpirlo
         th_filtro.interrupt();
         try {
@@ -138,38 +152,48 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             th_filtro.join();
         } catch (InterruptedException e) {}
 
-
-        Handler handler = new Handler(Looper.getMainLooper());
-
         /*Reescribe el thread para la nueva búsqueda
         asignando un comprobación en todo momento*/
         th_filtro = new Thread(() -> {
 
             if(!th_filtro.isInterrupted()){
                 data_filtrada.clear();
+                state_data = false;
             } else {return;}
-            
-            for (ItemDataYape item : data) {
+
+            int numDatos = data.size();
+            int divisor = numDatos/2;
+
+            for (int i = 0; i < numDatos; i++) {
                 if(!th_filtro.isInterrupted()){
-                    if (item.comprobar(filtro)) {
-                        data_filtrada.add(item);
+                    if (data.get(i).comprobar(filtro)) {
+                        data_filtrada.add(data.get(i));
+                    }
+                    if (!th_filtro.isInterrupted() && esMultiplo(i,divisor)){
+                        hiloUI.post(() -> {
+                            if (!th_filtro.isInterrupted()) {
+                                notifyDataSetChanged();
+                            }
+                        });
                     }
                 }
                 else {return;}
             }
 
-            state_data = false;
-
-            if(!th_filtro.isInterrupted()){
-                handler.post(() -> {
+           if(!th_filtro.isInterrupted()){
+               hiloUI.post(() -> {
                     notifyDataSetChanged();
                 });
-            } else {return;}
+           }
 
         });
 
         th_filtro.start();
 
+    }
+
+    public boolean esMultiplo(int numero, int divisor) {
+        return divisor != 0 && numero % divisor == 0;
     }
 
 
@@ -179,9 +203,4 @@ public class AdapterYape extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             notifyDataSetChanged();
         }
     }
-
-
-
-
-
 }

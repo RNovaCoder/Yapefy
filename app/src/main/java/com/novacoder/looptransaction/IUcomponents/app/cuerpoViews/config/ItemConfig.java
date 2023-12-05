@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import com.novacoder.looptransaction.ConfigApp;
 import com.novacoder.looptransaction.R;
 
+import java.util.Arrays;
+
 public class ItemConfig extends LinearLayout {
 
     private LayoutInflater manager_xml;
@@ -76,6 +78,33 @@ public class ItemConfig extends LinearLayout {
 
     }
 
+    public void PrepareItem (String Key, String [] Valores, int[] index) {
+
+        KeyIt = Key;
+        ValoresIt = Valores;
+
+        TituloView.setText(KeyIt);
+        String valueAc = getConfigValue(KeyIt);
+        ValorView.setText(valueAc);
+
+        alert.setRunnableChangeItem(
+                (newValue) -> {
+                    int posicion = Arrays.asList(ValoresIt).indexOf(newValue);
+                    String valueIndex = String.valueOf(index[posicion]);
+                    setConfigValue(KeyIt, valueIndex);
+                    ValorView.setText(getConfigValue(KeyIt));
+                    alert.dismissAlert();
+                }
+        );
+
+        alert.prepareAlert(Key, Valores, valueAc);
+
+
+        this.setOnClickListener(view -> {
+            alert.showAlert();
+        });
+
+    }
 
     private String getConfigValue (String Key) {
         return ConfigApp.get(Key);
@@ -84,8 +113,6 @@ public class ItemConfig extends LinearLayout {
     private void setConfigValue (String Key, String Value) {
         ConfigApp.set(Key, Value);
     }
-
-
 
 
 }

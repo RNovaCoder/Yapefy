@@ -59,9 +59,8 @@ public class Config extends LinearLayout {
         InpConToken.setRestriction(InpConToken.RES_WH_SPCS);
         addConfig(InpConToken);*/
 
-        InputConfig InpConCantTransc = new InputConfig(getContext());
-        InpConCantTransc.PrepareInput(ConfigApp.KEY_NUM_TRANSACCIONES, ConfigApp.NUM_TRANSACCIONES);
-        InpConCantTransc.setRestriction(InpConCantTransc.RES_NUMBS);
+        ItemConfig InpConCantTransc = new ItemConfig(getContext());
+        InpConCantTransc.PrepareItem(ConfigApp.KEY_NUM_MESES, ConfigApp.meses, ConfigApp.mesesIndex);
         addConfig(InpConCantTransc);
 
         addConfig(new ButtonOut(getContext()));

@@ -11,10 +11,12 @@
         android:name="android.permission.ACCESS_NOTIFICATION_POLICY"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".AppInicializador"
         android:allowBackup="true"
+        android:background="@drawable/ic_launcher"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enabled="true"
         android:exported="true"
@@ -28,8 +30,7 @@
         <activity
             android:name=".actividades.Login"
             android:exported="true"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".actividades.App"
             android:exported="true" />
@@ -54,6 +55,27 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".actividades.Update"
+            android:exported="true"
+            android:enabled="true">
+
+            <intent-filter>
+                <category android:name="android.intent.category.OPENABLE" />
+                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="content"/>
+                <data android:scheme="file"/>
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.csv" />
+                <data android:pathPattern=".*\\..*\\.csv" />
+                <data android:pathPattern=".*\\..*\\..*\\.csv" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.csv" />
+            </intent-filter>
+
+
         </activity>
     </application>
 

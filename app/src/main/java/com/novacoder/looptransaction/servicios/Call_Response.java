@@ -2,6 +2,7 @@ package com.novacoder.looptransaction.servicios;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.novacoder.looptransaction.ConfigApp;
@@ -30,7 +31,6 @@ public class Call_Response {
     static String nCODE_ERROR = "CALL_RESPONSE";
 
     static synchronized public void response(JSONObject response, Transaccion transaccion) {
-
         //Log.d(nCODE_ERROR, "RECIBIDO AUD");
         try {
 
@@ -62,7 +62,7 @@ public class Call_Response {
 
     }
 
-    static public void error_response(VolleyError error, Transaccion transaccion) {
+    static public void error_response(VolleyError error, Transaccion transaccion, Context context) {
 
         try {
             //Errores de validación
@@ -85,18 +85,23 @@ public class Call_Response {
                 if (transaccion != null) {
                     FE_RepositoryLocal.set_estado_pendiente(transaccion);
                 }
-                Login.Logout(contexto);
+                if (context != null) {
+                    Login.Logout(context);
+                }
 
             } else {
                 //Error de conexión y no de Validación o Duplicidad
                 //Debe volver a enviarlo
-                FE_RepositoryLocal.set_estado_pendiente(transaccion);
+                if (transaccion != null) {
+                    FE_RepositoryLocal.set_estado_pendiente(transaccion);
+                }
             }
 
 
-        } catch (JSONException e) {
-            //Log.d(nCODE_ERROR, e.getMessage());
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            Log.d(nCODE_ERROR, e.getMessage());
+            String mensaje = e.getMessage();
+            Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
         }
     }
 

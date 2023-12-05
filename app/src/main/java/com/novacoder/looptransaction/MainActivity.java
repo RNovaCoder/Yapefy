@@ -54,11 +54,11 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, App.class);
         }
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
         //Log.d("signError", "ACTIVIDA PRINCIAPL");
-        finish();
+        //finish();
     }
 
 
@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         Toast myToast = Toast.makeText(getApplicationContext(), Mensaje, Toast.LENGTH_SHORT);
         myToast.show();
         Intent intentSetting = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-        intentSetting.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intentSetting, 4);
     }
 

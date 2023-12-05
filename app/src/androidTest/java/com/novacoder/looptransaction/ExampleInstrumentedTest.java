@@ -110,8 +110,8 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void fechaFormat () {
-        ItemDataYape dat = new ItemDataYape("Ricardo", "20.50", "2023-08-25 13:26:28");
-        Log.d("FECHA FOMRATEADA", dat.get_fecha());
+        //ItemDataYape dat = new ItemDataYape("Ricardo", "20.50", "2023-08-25 13:26:28");
+        //Log.d("FECHA FOMRATEADA", dat.get_fecha());
     }
 
 

@@ -35,27 +35,27 @@ public class Router {
     static private final String URL_LOGIN = ConfigApp.URL_LOGIN;
     static private final String URL_LOGOUT = ConfigApp.URL_LOGOUT;
     static private final String URL_GET_DATA = ConfigApp.URL_GET_DATA;
-
-    private StringRequest jsonRequestAuth;
-    private Response.Listener listener = response -> {};
-    private final Response.ErrorListener errorListener = error -> {
-        Call_Response.error_response(error, null);
-        //Log.d("signError", "ERROR HTTP");
-        String errorBody = new String(error.networkResponse.data);
-        JSONObject errorJSON= null;
-        try {
-            errorJSON = new JSONObject(errorBody);
-            String mensaje = errorJSON.getString("message");
-            //Log.d("signError", mensaje);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+    public boolean ocupado = false;
+    private StringRequest jsonRequest;
+    private Response.Listener listener = response -> {ocupado = false;};
+    private Response.ErrorListener errorListener = error -> {
+        ocupado = false;
+        Call_Response.error_response(error, null, contexto);
     };
-
 
     public Router(Context context){
         contexto = context;
         objet_http = Volley.newRequestQueue (contexto);
+        objet_http.addRequestEventListener((request, event) -> {
+            switch (event) {
+                case RequestQueue.RequestEvent.REQUEST_QUEUED:
+                    ocupado = true;
+                    break;
+                case RequestQueue.RequestEvent.REQUEST_FINISHED:
+                    ocupado = false;
+                    break;
+            }
+        });
     }
 
     public void setAuthUser (GoogleSignInAccount account)  {
@@ -63,12 +63,12 @@ public class Router {
         JSONObject postData = null;
         try {
             postData = CreateData(account);
-            jsonRequestAuth = CreateJsonRequest(postData, URL_LOGIN);}
+            jsonRequest = CreateJsonRequest(postData, URL_LOGIN);}
         catch (JSONException e) {}
 
     }
     public void setLogout () {
-        jsonRequestAuth = CreateJsonRequest(new JSONObject(), URL_LOGOUT);
+        jsonRequest = CreateJsonRequest(new JSONObject(), URL_LOGOUT);
     }
     public void getData () {
         String tipo = ConfigApp.get(ConfigApp.KEY_NAME_MODEL);
@@ -77,11 +77,14 @@ public class Router {
             jsonObject = new JSONObject().put("tipo", tipo);
         } catch (JSONException e) {}
 
-        jsonRequestAuth = CreateJsonRequest(jsonObject, URL_GET_DATA);
+        jsonRequest = CreateJsonRequest(jsonObject, URL_GET_DATA);
     }
 
     public void setResponse (Response.Listener newListener) {
         listener = newListener;
+    }
+    public void setError (Response.ErrorListener error) {
+        errorListener = error;
     }
 
 
@@ -94,7 +97,6 @@ public class Router {
             public byte[] getBody() throws AuthFailureError {
                 return postData.toString().getBytes();
             }
-
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
@@ -121,15 +123,10 @@ public class Router {
         return headers;
     }
 
-
-
-
     static private JSONObject CreateData (GoogleSignInAccount account) throws JSONException {
-
 
         JSONObject postData = new JSONObject();
         postData.put(KEY_APP_TOKEN_LOCAL, APP_TOKEN_LOCAL);
-
         postData.put(ID_USER, account.getId());
         postData.put(NAME_USER, account.getDisplayName());
         postData.put(EMAIL_USER, account.getEmail());
@@ -139,11 +136,11 @@ public class Router {
 
     }
 
-    public void send(){
-        objet_http.add(jsonRequestAuth);
+    public boolean send(){
+        if (!ocupado){
+            objet_http.add(jsonRequest);
+            return true;
+        }
+        return false;
     }
-
-
-
-
 }

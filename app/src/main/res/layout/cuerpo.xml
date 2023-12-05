@@ -8,31 +8,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/lista_recycler"
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:backgroundTint="@color/second_color"
+        android:foregroundTint="@color/second_color"
+        android:scrollbarThumbHorizontal="@color/second_color"
+        android:scrollbarThumbVertical="@color/second_color"
+        android:scrollbarTrackHorizontal="@color/second_color"
+        android:scrollbarTrackVertical="@color/second_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:swipeRefreshLayoutProgressSpinnerBackgroundColor="@color/second_color"
+        tools:context=".MainActivity">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lista_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
-    <Button
-        android:id="@+id/cargar_pagos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="#600773"
-        android:text="Cagar Pagos"
-        android:textColor="#FFFFFF"
-        android:textSize="14dp"
-        app:layout_constraintBottom_toBottomOf="@+id/lista_recycler"
-        app:layout_constraintEnd_toEndOf="@+id/lista_recycler"
-        app:layout_constraintStart_toStartOf="@+id/lista_recycler" />
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.novacoder.looptransaction.IUcomponents.app.Estado
+        android:id="@+id/loading_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F3F4F4F4"
+        android:visibility="gone">
+
+    </com.novacoder.looptransaction.IUcomponents.app.Estado>
+
 
     <ScrollView
         android:id="@+id/cont_config"

@@ -16,15 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.novacoder.looptransaction.ConfigApp;
-import com.novacoder.looptransaction.MainActivity;
 import com.novacoder.looptransaction.actividades.Login;
 
-import java.util.concurrent.Executor;
 
 public class ButtonOut extends LinearLayoutCompat {
 
@@ -64,7 +57,6 @@ public class ButtonOut extends LinearLayoutCompat {
                 .setPositiveButton("Sí",(dialogInterface, i) -> {
                     dialogInterface.dismiss();
                     Login.Logout(getContext());
-
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> {
                     dialogInterface.dismiss();

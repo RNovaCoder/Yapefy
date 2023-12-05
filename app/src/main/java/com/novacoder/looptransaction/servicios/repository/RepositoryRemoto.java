@@ -19,10 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class RepositoryRemoto {
-
     static public RequestQueue objet_http;
-    static String ESTADO_ENVIADO = ConfigApp.ESTADO_ENVIADO;
-
     public void enviar_registros (ArrayList<Transaccion> transacciones){
 
         for (Transaccion transaccion: transacciones) {
@@ -38,7 +35,7 @@ public abstract class RepositoryRemoto {
             Response.ErrorListener errorListener = new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Call_Response.error_response(error, transaccion);
+                    Call_Response.error_response(error, transaccion, null);
                 }
             };
 

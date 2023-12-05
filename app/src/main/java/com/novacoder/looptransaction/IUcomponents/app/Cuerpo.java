@@ -13,19 +13,24 @@ import android.widget.ScrollView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.novacoder.looptransaction.Auth.Router;
 import com.novacoder.looptransaction.IUcomponents.app.cuerpoViews.listaItems.yape.AdapterYape;
 import com.novacoder.looptransaction.IUcomponents.app.cuerpoViews.listaItems.yape.ItemDataYape;
 import com.novacoder.looptransaction.R;
-import com.novacoder.looptransaction.IUcomponents.Enrutador;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,98 +40,64 @@ import java.util.Locale;
 
 
 public class Cuerpo extends ConstraintLayout {
-
     private LayoutInflater manager_xml;
-    private Button cargar_pagos;
+    private SwipeRefreshLayout refreshLayout;
     private ScrollView cont_config;
     private RecyclerView lista;
-
     private AdapterYape adp_yape;
 
-
     public Cuerpo(Context context, AttributeSet atr) {
-
         super(context, atr);
         inicializar();
     }
 
     public Cuerpo(Context context) {
-
         super(context);
         inicializar();
-
     }
 
     private void inicializar() {
-
         manager_xml = LayoutInflater.from(this.getContext());
         manager_xml.inflate(R.layout.cuerpo, this, true);
-
-        cargar_pagos = this.findViewById(R.id.cargar_pagos);
+        refreshLayout = this.findViewById(R.id.swipe_refresh_layout);
         cont_config = this.findViewById(R.id.cont_config);
-
         lista = this.findViewById(R.id.lista_recycler);
-
-
         adp_yape = new AdapterYape();
         lista.setAdapter(adp_yape);
         lista.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
-        cargar_pagos.setOnClickListener(view -> {
-            Router router = new Router(getContext());
-            router.setResponse(response -> {
-                try {
-                    set_data(new JSONArray((String) response));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            router.getData();
-            router.send();
-
-        });
-
-        cargar_pagos.performClick();
     }
 
-    
-    public void filtrar_data(String filtro) {
 
+    public void filtrar_data(String filtro) {
         adp_yape.filtrar_data(filtro);
         lista.scrollToPosition(0);
-
     }
 
-
+    public void visible(boolean flag) {
+        animar_view(lista, flag);
+        lista.scrollToPosition(0);
+    }
 
     public void data_default() {
+        adp_yape.detener_filter();
         adp_yape.default_data();
         lista.scrollToPosition(0);
-
     }
 
-    public void set_data(JSONArray data) {
-        adp_yape.set_data(JsonToListObjetc(data));
+    public void set_data(List<ItemDataYape> data) {
+        adp_yape.set_data(data);
         lista.scrollToPosition(0);
     }
 
-
-
-
     public void animar_config(Boolean flag) {
-
         animar_view(cont_config, flag);
-        animar_view(cargar_pagos, !flag);
+        refreshLayout.setEnabled(!flag);
         data_default();
-
     }
 
     public void animar_button(Boolean flag) {
-        animar_view(cargar_pagos, flag);
+        refreshLayout.setEnabled(flag);
     }
-
-
 
 
     private void animar_view(View witget, boolean flag) {
@@ -145,61 +116,5 @@ public class Cuerpo extends ConstraintLayout {
                         witget.setVisibility(new_status);
                     });
         }
-
-
     }
-
-    public List<ItemDataYape> JsonToListObjetc (JSONArray data) {
-
-        List<ItemDataYape> data_lista =  new ArrayList<>();
-        ItemDataYape listItem;
-        try {
-            for (int i = 0; i < data.length() ; i++) {
-
-                JSONObject item = data.getJSONObject(i);
-
-                String nombre = (String) item.get("nombre");
-                String fecha = formatDate((String) item.get("fecha"));
-                String monto = (String) item.get("monto");
-
-                listItem = new ItemDataYape(nombre, monto, fecha);
-
-                data_lista.add(listItem);
-
-            }
-        }
-        catch (Exception e) {}
-
-        return data_lista;
-
-    }
-
-    public String formatDate(String fechaOriginal) {
-        try {
-            SimpleDateFormat sdfOriginal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            Date fechaPublicacion = sdfOriginal.parse(fechaOriginal);
-
-
-            SimpleDateFormat sdfNuevo = new SimpleDateFormat("d MMM. yyyy - h:mm a",Locale.getDefault());
-            String fechaFormateada = sdfNuevo.format(fechaPublicacion);
-
-            // Corregir el doble punto después del mes
-            fechaFormateada = fechaFormateada.replace("..", ".");
-
-            // Capitalizar la primera letra del mes
-            String[] partes = fechaFormateada.split(" ");
-            if (partes.length >= 2) {
-                partes[1] = partes[1].substring(0, 1).toUpperCase() + partes[1].substring(1);
-                fechaFormateada = partes[0] + " " + partes[1] + " " + partes[2] + " " + partes[3] + " " + partes[4] + " " + partes[5];
-                fechaFormateada = fechaFormateada.replaceAll("\\s+", " ");
-                fechaFormateada = (fechaFormateada.replace("p. m.", "pm")).replace("a. m.", "am");
-            }
-
-            return fechaFormateada;
-        } catch (ParseException e) {
-            return "";
-        }
-    }
-
-
 }

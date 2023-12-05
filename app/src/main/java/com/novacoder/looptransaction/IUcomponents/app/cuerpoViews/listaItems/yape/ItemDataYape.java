@@ -1,15 +1,14 @@
 package com.novacoder.looptransaction.IUcomponents.app.cuerpoViews.listaItems.yape;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class ItemDataYape {
     private String monto;
-    private String fecha;
+    public String fecha;
     private String nombre;
 
     private List<String> atributos;
@@ -18,38 +17,56 @@ public class ItemDataYape {
         this.nombre = nombre;
         this.monto = monto;
         this.fecha = fecha;
-
-        this.atributos = new ArrayList<String>() {{
-            add(nombre);
-            add(monto);
-            add(fecha);}};
     }
 
     public String get_nombre() {
         return nombre;
     }
+
     public String get_monto() {
-        return formatMont(monto);
+        return monto;
     }
-    public String get_fecha() {return fecha;}
+
+    public String get_fecha() {
+        return fecha;
+    }
 
 
-    public boolean comprobar (String filtro){
+    public boolean comprobar(String filtro) {
 
-        filtro = filtro.toLowerCase().replaceAll("\\s", "");
+        filtro = formatFilter(filtro);
 
-        for (String valor: atributos) {
-            valor = valor.toLowerCase().replaceAll("\\s", "");
-            if (valor.contains(filtro)) {
-                return true;
-            }
+        if (formatFilter(get_nombre()).contains(filtro)) {
+            return true;
+        }
+        if (formatFilter(get_fecha()).contains(filtro)) {
+            return true;
+        }
+        if (formatFilter(get_monto()).contains(filtro)) {
+            return true;
         }
 
         return false;
     }
 
-    public String formatMont(String monto) {
-        return "S/ " + monto;
+    private String formatFilter(String filter) {
+        return filter.toLowerCase().replaceAll("\\s", "");
+    }
+
+    static public List<ItemDataYape> JsonArrayToList(JSONArray data) {
+
+        List<ItemDataYape> data_lista = new ArrayList<>();
+        try {
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject item = data.getJSONObject(i);
+                String nombre = (String) item.get("nombre");
+                String fecha = (String) item.get("fecha_visual");
+                String monto = "S/ " + (String) item.get("monto");
+                data_lista.add(new ItemDataYape(nombre, monto, fecha));
+            }
+        } catch (Exception e) {
+        }
+        return data_lista;
     }
 
 }
